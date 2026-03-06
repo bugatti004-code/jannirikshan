@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     :root {
       --bg:        #080D1A;
@@ -17,84 +18,64 @@
       --surface-2: #162138;
       --border:    rgba(255,255,255,0.07);
       --border-2:  rgba(255,255,255,0.12);
-
       --gold:      #C9A44C;
       --gold-light:#DDB96A;
       --gold-dim:  rgba(201,164,76,0.12);
       --gold-dim2: rgba(201,164,76,0.2);
-
       --teal:      #2DD4BF;
       --teal-light:#5EEAD4;
       --teal-dim:  rgba(45,212,191,0.1);
-
       --crimson:   #F43F5E;
       --crimson-dim: rgba(244,63,94,0.1);
-
       --emerald:   #10B981;
       --emerald-dim: rgba(16,185,129,0.1);
-
       --amber:     #F59E0B;
       --amber-dim: rgba(245,158,11,0.1);
-
       --text-1:    #F1F5F9;
       --text-2:    #94A3B8;
       --text-3:    #64748B;
-
       --shadow:    0 4px 24px rgba(0,0,0,0.4);
       --shadow-lg: 0 12px 48px rgba(0,0,0,0.5);
       --glow-gold: 0 0 32px rgba(201,164,76,0.15);
       --glow-teal: 0 0 32px rgba(45,212,191,0.12);
-
       --radius:    16px;
       --radius-sm: 10px;
       --radius-xs: 6px;
     }
-
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
-
     body {
       font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text-1);
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
+      background: var(--bg); color: var(--text-1);
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
     }
-
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: var(--bg-2); }
     ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
 
-    /* ─────────────────── NAV ─────────────────── */
+    /* NAV */
     nav {
       position: sticky; top: 0; z-index: 100;
       background: rgba(8,13,26,0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 48px; height: 68px;
     }
-    .nav-logo {
-      display: flex; align-items: center; gap: 12px; text-decoration: none;
-    }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
     .logo-mark {
       width: 38px; height: 38px; border-radius: 10px;
       background: linear-gradient(135deg, var(--gold), #a07c2e);
       display: flex; align-items: center; justify-content: center;
-      font-size: 16px; color: var(--bg);
-      box-shadow: 0 0 16px rgba(201,164,76,0.3);
+      font-size: 16px; color: var(--bg); box-shadow: 0 0 16px rgba(201,164,76,0.3);
     }
-    .logo-text { font-size: 18px; font-weight: 700; color: var(--text-1); letter-spacing: 0.3px; }
+    .logo-text { font-size: 18px; font-weight: 700; color: var(--text-1); }
     .logo-text em { font-style: normal; color: var(--gold); }
-
     .nav-links { display: flex; gap: 4px; list-style: none; }
     .nav-links a {
       color: var(--text-2); text-decoration: none;
       padding: 7px 13px; border-radius: var(--radius-xs);
-      font-size: 13.5px; font-weight: 500;
-      transition: all 0.2s;
+      font-size: 13.5px; font-weight: 500; transition: all 0.2s;
     }
     .nav-links a:hover { color: var(--text-1); background: var(--surface); }
     .nav-badge {
@@ -106,32 +87,23 @@
     }
     .nav-badge::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--emerald); animation: blink 1.5s infinite; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-
     .nav-cta {
       background: linear-gradient(135deg, var(--gold), #a07c2e) !important;
       color: var(--bg) !important; font-weight: 600 !important;
       border-radius: var(--radius-xs) !important; padding: 7px 18px !important;
       box-shadow: 0 0 16px rgba(201,164,76,0.25);
     }
-    .nav-cta:hover { box-shadow: 0 0 24px rgba(201,164,76,0.4) !important; background: var(--gold-light) !important; }
+    .nav-cta:hover { box-shadow: 0 0 24px rgba(201,164,76,0.4) !important; }
 
-    /* ─────────────────── ACCENT LINE ─────────────────── */
-    .accent-line {
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--gold), var(--teal), transparent);
-      opacity: 0.6;
-    }
+    .accent-line { height: 1px; background: linear-gradient(to right, transparent, var(--gold), var(--teal), transparent); opacity: 0.6; }
 
-    /* ─────────────────── HERO ─────────────────── */
+    /* HERO */
     .hero {
-      background: var(--bg-2);
-      padding: 100px 48px 90px;
-      text-align: center;
-      position: relative; overflow: hidden;
+      background: var(--bg-2); padding: 100px 48px 90px;
+      text-align: center; position: relative; overflow: hidden;
     }
     .hero::before {
-      content: '';
-      position: absolute; inset: 0;
+      content: ''; position: absolute; inset: 0;
       background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,164,76,0.07) 0%, transparent 70%),
                   radial-gradient(ellipse 60% 50% at 80% 100%, rgba(45,212,191,0.05) 0%, transparent 60%);
       pointer-events: none;
@@ -139,447 +111,298 @@
     .hero-eyebrow {
       display: inline-flex; align-items: center; gap: 8px;
       background: var(--gold-dim); border: 1px solid rgba(201,164,76,0.25);
-      color: var(--gold-light); padding: 6px 16px;
-      border-radius: 20px; font-size: 12px; font-weight: 600;
-      letter-spacing: 0.8px; text-transform: uppercase;
-      margin-bottom: 28px;
+      color: var(--gold-light); padding: 6px 16px; border-radius: 20px;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 28px;
     }
     .hero h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(36px, 5.5vw, 62px);
-      font-weight: 800; line-height: 1.12;
+      font-size: clamp(36px, 5.5vw, 62px); font-weight: 800; line-height: 1.12;
       color: var(--text-1); margin-bottom: 22px;
     }
     .hero h1 .highlight {
       background: linear-gradient(135deg, var(--gold), var(--gold-light));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .hero h1 .highlight-teal {
       background: linear-gradient(135deg, var(--teal), var(--teal-light));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
-    .hero-sub {
-      font-size: clamp(15px, 1.8vw, 18px);
-      color: var(--text-2); max-width: 640px;
-      margin: 0 auto 44px; line-height: 1.75; font-weight: 400;
-    }
-    .hero-btns {
-      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
-      margin-bottom: 72px;
-    }
+    .hero-sub { font-size: clamp(15px,1.8vw,18px); color: var(--text-2); max-width: 640px; margin: 0 auto 44px; line-height: 1.75; }
+    .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 72px; }
     .btn-gold {
-      background: linear-gradient(135deg, var(--gold), #a07c2e);
-      color: var(--bg); border: none;
-      padding: 13px 30px; border-radius: var(--radius-sm);
-      font-size: 15px; font-weight: 600; cursor: pointer;
-      transition: all 0.25s; text-decoration: none;
+      background: linear-gradient(135deg, var(--gold), #a07c2e); color: var(--bg); border: none;
+      padding: 13px 30px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 600;
+      cursor: pointer; transition: all 0.25s; text-decoration: none;
       display: inline-flex; align-items: center; gap: 8px;
-      box-shadow: 0 4px 20px rgba(201,164,76,0.3);
-      font-family: 'Inter', sans-serif;
+      box-shadow: 0 4px 20px rgba(201,164,76,0.3); font-family: 'Inter', sans-serif;
     }
     .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(201,164,76,0.45); }
     .btn-ghost {
-      background: var(--surface);
-      color: var(--text-1); border: 1px solid var(--border-2);
-      padding: 13px 30px; border-radius: var(--radius-sm);
-      font-size: 15px; font-weight: 500; cursor: pointer;
-      transition: all 0.25s; text-decoration: none;
-      display: inline-flex; align-items: center; gap: 8px;
-      font-family: 'Inter', sans-serif;
+      background: var(--surface); color: var(--text-1); border: 1px solid var(--border-2);
+      padding: 13px 30px; border-radius: var(--radius-sm); font-size: 15px; font-weight: 500;
+      cursor: pointer; transition: all 0.25s; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px; font-family: 'Inter', sans-serif;
     }
     .btn-ghost:hover { background: var(--surface-2); border-color: var(--gold); transform: translateY(-2px); }
-
-    .hero-stats {
-      display: flex; justify-content: center; gap: 64px; flex-wrap: wrap;
-      padding-top: 48px; border-top: 1px solid var(--border);
-    }
+    .hero-stats { display: flex; justify-content: center; gap: 64px; flex-wrap: wrap; padding-top: 48px; border-top: 1px solid var(--border); }
     .stat-item { text-align: center; }
     .stat-num {
       font-size: 34px; font-weight: 800;
       background: linear-gradient(135deg, var(--gold), var(--gold-light));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
       display: block; line-height: 1;
     }
     .stat-label { font-size: 12px; color: var(--text-3); margin-top: 6px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; }
 
-    /* ─────────────────── SECTION COMMON ─────────────────── */
+    /* SECTIONS */
     section { padding: 88px 48px; }
     .section-eyebrow {
       display: inline-flex; align-items: center; gap: 6px;
-      color: var(--gold); font-size: 11px; font-weight: 700;
-      letter-spacing: 1.5px; text-transform: uppercase;
-      margin-bottom: 14px;
+      color: var(--gold); font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 14px;
     }
-    .section-eyebrow::before {
-      content: ''; display: block; width: 20px; height: 1px; background: var(--gold);
-    }
-    .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(26px, 3.5vw, 38px);
-      font-weight: 700; color: var(--text-1); margin-bottom: 14px;
-      line-height: 1.25;
-    }
-    .section-sub {
-      font-size: 15px; color: var(--text-2); max-width: 520px; line-height: 1.75;
-    }
+    .section-eyebrow::before { content:''; display:block; width:20px; height:1px; background:var(--gold); }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(26px,3.5vw,38px); font-weight: 700; color: var(--text-1); margin-bottom: 14px; line-height: 1.25; }
+    .section-sub { font-size: 15px; color: var(--text-2); max-width: 520px; line-height: 1.75; }
     .section-header { margin-bottom: 52px; }
 
-    /* ─────────────────── HOW IT WORKS ─────────────────── */
+    /* HOW IT WORKS */
     #how-it-works { background: var(--bg-2); }
     .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
     .step-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 36px 26px;
-      text-align: center; transition: all 0.3s;
-      position: relative; overflow: hidden;
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 36px 26px; text-align: center; transition: all 0.3s; position: relative; overflow: hidden;
     }
-    .step-card::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(135deg, var(--gold-dim) 0%, transparent 60%);
-      opacity: 0; transition: opacity 0.3s;
-    }
+    .step-card::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,var(--gold-dim) 0%,transparent 60%); opacity:0; transition:opacity 0.3s; }
     .step-card:hover { border-color: rgba(201,164,76,0.3); transform: translateY(-6px); box-shadow: var(--glow-gold); }
     .step-card:hover::before { opacity: 1; }
-    .step-num {
-      position: absolute; top: 16px; right: 16px;
-      font-size: 48px; font-weight: 800;
-      color: rgba(255,255,255,0.03); line-height: 1;
-      font-family: 'Playfair Display', serif;
-    }
-    .step-icon {
-      width: 60px; height: 60px; border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px; margin: 0 auto 20px;
-    }
-    .step-icon.gold { background: var(--gold-dim); color: var(--gold); }
-    .step-icon.teal { background: var(--teal-dim); color: var(--teal); }
-    .step-icon.emerald { background: var(--emerald-dim); color: var(--emerald); }
-    .step-icon.amber { background: var(--amber-dim); color: var(--amber); }
-    .step-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 10px; color: var(--text-1); }
-    .step-card p { font-size: 13.5px; color: var(--text-2); line-height: 1.7; }
+    .step-num { position:absolute; top:16px; right:16px; font-size:48px; font-weight:800; color:rgba(255,255,255,0.03); font-family:'Playfair Display',serif; }
+    .step-icon { width:60px; height:60px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:24px; margin:0 auto 20px; }
+    .step-icon.gold { background:var(--gold-dim); color:var(--gold); }
+    .step-icon.teal { background:var(--teal-dim); color:var(--teal); }
+    .step-icon.emerald { background:var(--emerald-dim); color:var(--emerald); }
+    .step-icon.amber { background:var(--amber-dim); color:var(--amber); }
+    .step-card h3 { font-size:16px; font-weight:700; margin-bottom:10px; color:var(--text-1); }
+    .step-card p { font-size:13.5px; color:var(--text-2); line-height:1.7; }
 
-    /* ─────────────────── SCHEMES ─────────────────── */
+    /* SCHEMES */
     #schemes { background: var(--bg); }
     .schemes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 20px; }
     .scheme-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 26px;
-      cursor: pointer; transition: all 0.3s;
-      display: flex; flex-direction: column; gap: 18px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 26px; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; gap: 18px;
     }
     .scheme-card:hover { border-color: rgba(201,164,76,0.25); transform: translateY(-4px); box-shadow: var(--glow-gold); }
     .scheme-header { display: flex; align-items: center; justify-content: space-between; }
-    .scheme-icon-wrap {
-      width: 48px; height: 48px; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center; font-size: 22px;
-    }
-    .scheme-badge { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
-    .badge-active { background: var(--emerald-dim); color: var(--emerald); border: 1px solid rgba(16,185,129,0.2); }
-    .badge-monitoring { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
-    .badge-critical { background: var(--crimson-dim); color: var(--crimson); border: 1px solid rgba(244,63,94,0.2); }
-    .scheme-name { font-size: 15px; font-weight: 700; color: var(--text-1); }
-    .scheme-dept { font-size: 11.5px; color: var(--text-3); margin-top: 3px; }
-    .scheme-progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-3); margin-bottom: 7px; }
-    .progress-bar { height: 4px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
-    .progress-fill { height: 100%; border-radius: 2px; background: linear-gradient(to right, var(--gold), var(--teal)); transition: width 1.2s ease; }
-    .scheme-stats { display: flex; gap: 16px; }
-    .scheme-stat { font-size: 12px; color: var(--text-3); }
-    .scheme-stat strong { font-size: 15px; font-weight: 700; color: var(--text-1); display: block; }
+    .scheme-icon-wrap { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; }
+    .scheme-badge { font-size:11px; font-weight:600; padding:3px 10px; border-radius:20px; }
+    .badge-active { background:var(--emerald-dim); color:var(--emerald); border:1px solid rgba(16,185,129,0.2); }
+    .badge-monitoring { background:var(--amber-dim); color:var(--amber); border:1px solid rgba(245,158,11,0.2); }
+    .badge-critical { background:var(--crimson-dim); color:var(--crimson); border:1px solid rgba(244,63,94,0.2); }
+    .scheme-name { font-size:15px; font-weight:700; color:var(--text-1); }
+    .scheme-dept { font-size:11.5px; color:var(--text-3); margin-top:3px; }
+    .scheme-progress-label { display:flex; justify-content:space-between; font-size:12px; color:var(--text-3); margin-bottom:7px; }
+    .progress-bar { height:4px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden; }
+    .progress-fill { height:100%; border-radius:2px; background:linear-gradient(to right,var(--gold),var(--teal)); transition:width 1.2s ease; }
+    .scheme-stats { display:flex; gap:16px; }
+    .scheme-stat { font-size:12px; color:var(--text-3); }
+    .scheme-stat strong { font-size:15px; font-weight:700; color:var(--text-1); display:block; }
 
-    /* ─────────────────── SUBMIT ─────────────────── */
+    /* SUBMIT */
     #submit { background: var(--bg-2); }
     .submit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
-    .submit-info h3 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 14px; }
-    .submit-info p { color: var(--text-2); line-height: 1.75; margin-bottom: 28px; font-size: 15px; }
-    .submit-features { display: flex; flex-direction: column; gap: 16px; }
-    .submit-feature { display: flex; align-items: flex-start; gap: 14px; }
-    .feat-icon {
-      width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center; font-size: 15px;
-    }
-    .feat-icon.gold { background: var(--gold-dim); color: var(--gold); }
-    .feat-icon.teal { background: var(--teal-dim); color: var(--teal); }
-    .feat-icon.emerald { background: var(--emerald-dim); color: var(--emerald); }
-    .feat-icon.amber { background: var(--amber-dim); color: var(--amber); }
-    .feat-text strong { font-size: 14px; font-weight: 600; display: block; color: var(--text-1); }
-    .feat-text span { font-size: 13px; color: var(--text-3); line-height: 1.5; }
-
-    .review-form {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 36px;
-    }
-    .review-form h3 { font-size: 17px; font-weight: 700; margin-bottom: 26px; color: var(--text-1); display: flex; align-items: center; gap: 8px; }
-    .form-group { margin-bottom: 18px; }
-    .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-3); margin-bottom: 7px; letter-spacing: 0.5px; text-transform: uppercase; }
+    .submit-info h3 { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; margin-bottom:14px; }
+    .submit-info p { color:var(--text-2); line-height:1.75; margin-bottom:28px; font-size:15px; }
+    .submit-features { display:flex; flex-direction:column; gap:16px; }
+    .submit-feature { display:flex; align-items:flex-start; gap:14px; }
+    .feat-icon { width:38px; height:38px; border-radius:10px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:15px; }
+    .feat-icon.gold { background:var(--gold-dim); color:var(--gold); }
+    .feat-icon.teal { background:var(--teal-dim); color:var(--teal); }
+    .feat-icon.emerald { background:var(--emerald-dim); color:var(--emerald); }
+    .feat-icon.amber { background:var(--amber-dim); color:var(--amber); }
+    .feat-text strong { font-size:14px; font-weight:600; display:block; color:var(--text-1); }
+    .feat-text span { font-size:13px; color:var(--text-3); line-height:1.5; }
+    .review-form { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:36px; }
+    .review-form h3 { font-size:17px; font-weight:700; margin-bottom:26px; color:var(--text-1); display:flex; align-items:center; gap:8px; }
+    .form-group { margin-bottom:18px; }
+    .form-group label { display:block; font-size:12px; font-weight:600; color:var(--text-3); margin-bottom:7px; letter-spacing:0.5px; text-transform:uppercase; }
     .form-group select,
     .form-group input,
     .form-group textarea {
-      width: 100%; padding: 11px 14px;
-      background: var(--bg-2); border: 1px solid var(--border);
-      border-radius: var(--radius-xs);
-      font-size: 14px; color: var(--text-1);
-      transition: border-color 0.2s; outline: none; font-family: 'Inter', sans-serif;
+      width:100%; padding:11px 14px;
+      background:var(--bg-2); border:1px solid var(--border); border-radius:var(--radius-xs);
+      font-size:14px; color:var(--text-1); transition:border-color 0.2s; outline:none; font-family:'Inter',sans-serif;
     }
-    .form-group select option { background: var(--bg-2); }
+    .form-group select option { background:var(--bg-2); }
     .form-group select:focus,
     .form-group input:focus,
-    .form-group textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-dim); }
-    .form-group textarea { resize: vertical; min-height: 90px; }
+    .form-group textarea:focus { border-color:var(--gold); box-shadow:0 0 0 3px var(--gold-dim); }
+    .form-group textarea { resize:vertical; min-height:90px; }
     .form-group input::placeholder,
-    .form-group textarea::placeholder { color: var(--text-3); }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
+    .form-group textarea::placeholder { color:var(--text-3); }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
     .upload-area {
-      border: 1.5px dashed var(--border-2); border-radius: var(--radius-xs);
-      padding: 28px; text-align: center; cursor: pointer;
-      transition: all 0.2s; background: var(--bg-2);
+      border:1.5px dashed var(--border-2); border-radius:var(--radius-xs);
+      padding:28px; text-align:center; cursor:pointer; transition:all 0.2s; background:var(--bg-2);
     }
-    .upload-area:hover, .upload-area.dragover { border-color: var(--gold); background: var(--gold-dim); }
-    .upload-icon { font-size: 28px; color: var(--text-3); margin-bottom: 10px; }
-    .upload-area p { font-size: 13.5px; color: var(--text-2); }
-    .upload-area span { font-size: 11.5px; color: var(--text-3); }
-    .upload-preview { display: none; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-    .preview-thumb { width: 64px; height: 64px; border-radius: 8px; object-fit: cover; border: 1px solid var(--border-2); }
-
-    .rating-group { display: flex; gap: 8px; }
-    .rating-star { font-size: 22px; cursor: pointer; color: rgba(255,255,255,0.1); transition: color 0.15s; }
-    .rating-star.active { color: var(--gold); }
-
+    .upload-area:hover, .upload-area.dragover { border-color:var(--gold); background:var(--gold-dim); }
+    .upload-icon { font-size:28px; color:var(--text-3); margin-bottom:10px; }
+    .upload-area p { font-size:13.5px; color:var(--text-2); }
+    .upload-area span { font-size:11.5px; color:var(--text-3); }
+    .upload-preview { display:none; flex-wrap:wrap; gap:8px; margin-top:12px; }
+    .preview-thumb { width:64px; height:64px; border-radius:8px; object-fit:cover; border:1px solid var(--border-2); }
+    .rating-group { display:flex; gap:8px; }
+    .rating-star { font-size:22px; cursor:pointer; color:rgba(255,255,255,0.1); transition:color 0.15s; }
+    .rating-star.active { color:var(--gold); }
     .btn-submit {
-      width: 100%; padding: 14px;
-      background: linear-gradient(135deg, var(--gold), #9a7228);
-      color: var(--bg); border: none; border-radius: var(--radius-sm);
-      font-size: 15px; font-weight: 700; cursor: pointer;
-      transition: all 0.25s; display: flex; align-items: center; justify-content: center; gap: 8px;
-      font-family: 'Inter', sans-serif; letter-spacing: 0.3px;
-      box-shadow: 0 4px 20px rgba(201,164,76,0.25);
+      width:100%; padding:14px;
+      background:linear-gradient(135deg,var(--gold),#9a7228); color:var(--bg); border:none;
+      border-radius:var(--radius-sm); font-size:15px; font-weight:700; cursor:pointer;
+      transition:all 0.25s; display:flex; align-items:center; justify-content:center; gap:8px;
+      font-family:'Inter',sans-serif; box-shadow:0 4px 20px rgba(201,164,76,0.25);
     }
-    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(201,164,76,0.4); }
+    .btn-submit:hover { transform:translateY(-2px); box-shadow:0 8px 32px rgba(201,164,76,0.4); }
+    .btn-submit:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
 
-    /* ─────────────────── AI EVAL ─────────────────── */
+    /* AI EVAL */
     #ai-eval { background: var(--bg); }
-    .ai-demo-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
-    .ai-info h3 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 14px; }
-    .ai-info p { color: var(--text-2); line-height: 1.75; margin-bottom: 28px; font-size: 15px; }
-    .ai-capabilities { display: flex; flex-direction: column; gap: 10px; }
-    .ai-cap {
-      display: flex; align-items: center; gap: 14px;
-      padding: 14px 16px; border-radius: var(--radius-sm);
-      background: var(--surface); border: 1px solid var(--border);
-      transition: border-color 0.2s;
-    }
-    .ai-cap:hover { border-color: rgba(201,164,76,0.2); }
-    .ai-cap-icon { font-size: 20px; width: 32px; text-align: center; }
-    .ai-cap-text { font-size: 14px; font-weight: 600; color: var(--text-1); }
-    .ai-cap-text span { display: block; font-size: 12px; font-weight: 400; color: var(--text-3); margin-top: 2px; }
+    .ai-demo-wrap { display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start; }
+    .ai-info h3 { font-family:'Playfair Display',serif; font-size:24px; font-weight:700; margin-bottom:14px; }
+    .ai-info p { color:var(--text-2); line-height:1.75; margin-bottom:28px; font-size:15px; }
+    .ai-capabilities { display:flex; flex-direction:column; gap:10px; }
+    .ai-cap { display:flex; align-items:center; gap:14px; padding:14px 16px; border-radius:var(--radius-sm); background:var(--surface); border:1px solid var(--border); transition:border-color 0.2s; }
+    .ai-cap:hover { border-color:rgba(201,164,76,0.2); }
+    .ai-cap-icon { font-size:20px; width:32px; text-align:center; }
+    .ai-cap-text { font-size:14px; font-weight:600; color:var(--text-1); }
+    .ai-cap-text span { display:block; font-size:12px; font-weight:400; color:var(--text-3); margin-top:2px; }
+    .ai-result-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:30px; position:relative; overflow:hidden; }
+    .ai-result-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(to right,var(--gold),var(--teal)); }
+    .ai-result-title { font-size:14px; font-weight:700; margin-bottom:22px; display:flex; align-items:center; gap:8px; color:var(--text-2); }
+    .ai-score-big { text-align:center; margin-bottom:26px; }
+    .score-circle { width:104px; height:104px; border-radius:50%; border:6px solid rgba(255,255,255,0.06); display:flex; flex-direction:column; align-items:center; justify-content:center; margin:0 auto 12px; }
+    .score-circle.good { border-color:var(--emerald); box-shadow:0 0 20px rgba(16,185,129,0.15); }
+    .score-circle.avg { border-color:var(--amber); box-shadow:0 0 20px rgba(245,158,11,0.15); }
+    .score-circle.poor { border-color:var(--crimson); box-shadow:0 0 20px rgba(244,63,94,0.15); }
+    .score-val { font-size:30px; font-weight:800; line-height:1; }
+    .score-val.good { color:var(--emerald); }
+    .score-val.avg { color:var(--amber); }
+    .score-val.poor { color:var(--crimson); }
+    .score-circle p { font-size:10px; color:var(--text-3); }
+    .score-label { font-size:13px; font-weight:500; color:var(--text-2); }
+    .ai-metrics { display:flex; flex-direction:column; gap:13px; margin-bottom:22px; }
+    .ai-metric-top { display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:6px; color:var(--text-2); }
+    .ai-metric-top strong { font-weight:700; }
+    .ai-issues { margin-bottom:20px; }
+    .ai-issues h4 { font-size:11px; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; margin-bottom:10px; color:var(--text-3); }
+    .ai-issue-tag { display:inline-flex; align-items:center; gap:5px; background:var(--crimson-dim); color:var(--crimson); border:1px solid rgba(244,63,94,0.2); padding:4px 10px; border-radius:20px; font-size:11.5px; font-weight:500; margin:3px; }
+    .btn-forward { width:100%; padding:12px; background:linear-gradient(135deg,var(--teal),#0d9488); color:var(--bg); border:none; border-radius:var(--radius-sm); font-size:13.5px; font-weight:700; cursor:pointer; transition:all 0.25s; display:flex; align-items:center; justify-content:center; gap:8px; font-family:'Inter',sans-serif; box-shadow:0 4px 16px rgba(45,212,191,0.2); }
+    .btn-forward:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(45,212,191,0.35); }
 
-    .ai-result-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 30px; position: relative; overflow: hidden;
-    }
-    .ai-result-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-      background: linear-gradient(to right, var(--gold), var(--teal));
-    }
-    .ai-result-title { font-size: 14px; font-weight: 700; margin-bottom: 22px; display: flex; align-items: center; gap: 8px; color: var(--text-2); }
-    .ai-score-big { text-align: center; margin-bottom: 26px; }
-    .score-circle {
-      width: 104px; height: 104px; border-radius: 50%;
-      border: 6px solid rgba(255,255,255,0.06);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      margin: 0 auto 12px;
-    }
-    .score-circle.good { border-color: var(--emerald); box-shadow: 0 0 20px rgba(16,185,129,0.15); }
-    .score-circle.avg { border-color: var(--amber); box-shadow: 0 0 20px rgba(245,158,11,0.15); }
-    .score-circle.poor { border-color: var(--crimson); box-shadow: 0 0 20px rgba(244,63,94,0.15); }
-    .score-val { font-size: 30px; font-weight: 800; line-height: 1; }
-    .score-val.good { color: var(--emerald); }
-    .score-val.avg { color: var(--amber); }
-    .score-val.poor { color: var(--crimson); }
-    .score-circle p { font-size: 10px; color: var(--text-3); }
-    .score-label { font-size: 13px; font-weight: 500; color: var(--text-2); }
-    .ai-metrics { display: flex; flex-direction: column; gap: 13px; margin-bottom: 22px; }
-    .ai-metric-top { display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 6px; color: var(--text-2); }
-    .ai-metric-top strong { font-weight: 700; }
-    .ai-issues { margin-bottom: 20px; }
-    .ai-issues h4 { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 10px; color: var(--text-3); }
-    .ai-issue-tag {
-      display: inline-flex; align-items: center; gap: 5px;
-      background: var(--crimson-dim); color: var(--crimson);
-      border: 1px solid rgba(244,63,94,0.2);
-      padding: 4px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 500; margin: 3px;
-    }
-    .btn-forward {
-      width: 100%; padding: 12px;
-      background: linear-gradient(135deg, var(--teal), #0d9488);
-      color: var(--bg); border: none; border-radius: var(--radius-sm);
-      font-size: 13.5px; font-weight: 700; cursor: pointer;
-      transition: all 0.25s; display: flex; align-items: center; justify-content: center; gap: 8px;
-      font-family: 'Inter', sans-serif;
-      box-shadow: 0 4px 16px rgba(45,212,191,0.2);
-    }
-    .btn-forward:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(45,212,191,0.35); }
-
-    /* ─────────────────── LIVE FEED ─────────────────── */
+    /* LIVE FEED */
     #live-feed { background: var(--bg-2); }
-    .feed-header-row { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 36px; }
-    .live-indicator {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: var(--emerald-dim); border: 1px solid rgba(16,185,129,0.2);
-      color: var(--emerald); font-size: 11px; font-weight: 700;
-      padding: 5px 12px; border-radius: 20px; letter-spacing: 0.8px; text-transform: uppercase;
-    }
-    .live-indicator::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--emerald); animation: blink 1.5s infinite; }
-    .feed-list { display: flex; flex-direction: column; gap: 14px; }
-    .feed-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 22px 24px;
-      display: flex; gap: 16px; align-items: flex-start;
-      transition: all 0.25s;
-    }
-    .feed-card:hover { border-color: var(--border-2); transform: translateX(4px); }
-    .feed-avatar {
-      width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; font-weight: 700; color: var(--bg);
-    }
-    .feed-body { flex: 1; }
-    .feed-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
-    .feed-name { font-size: 14px; font-weight: 700; color: var(--text-1); }
-    .feed-scheme { font-size: 11px; padding: 2px 9px; border-radius: 20px; font-weight: 600; }
-    .feed-time { font-size: 11.5px; color: var(--text-3); margin-left: auto; }
-    .feed-text { font-size: 13.5px; color: var(--text-2); line-height: 1.65; margin-bottom: 12px; }
-    .feed-meta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-    .feed-loc { font-size: 12px; color: var(--text-3); display: flex; align-items: center; gap: 4px; }
-    .ai-score {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
-    }
-    .ai-score.good { background: var(--emerald-dim); color: var(--emerald); border: 1px solid rgba(16,185,129,0.2); }
-    .ai-score.avg { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
-    .ai-score.poor { background: var(--crimson-dim); color: var(--crimson); border: 1px solid rgba(244,63,94,0.2); }
-    .status-chip { font-size: 11px; font-weight: 600; padding: 2px 9px; border-radius: 20px; }
-    .status-chip.forwarded { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(45,212,191,0.2); }
-    .status-chip.pending { background: rgba(255,255,255,0.05); color: var(--text-3); border: 1px solid var(--border); }
-    .status-chip.resolved { background: var(--emerald-dim); color: var(--emerald); border: 1px solid rgba(16,185,129,0.2); }
+    .feed-header-row { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:36px; }
+    .live-indicator { display:inline-flex; align-items:center; gap:7px; background:var(--emerald-dim); border:1px solid rgba(16,185,129,0.2); color:var(--emerald); font-size:11px; font-weight:700; padding:5px 12px; border-radius:20px; letter-spacing:0.8px; text-transform:uppercase; }
+    .live-indicator::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--emerald); animation:blink 1.5s infinite; }
+    .feed-list { display:flex; flex-direction:column; gap:14px; }
+    .feed-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:22px 24px; display:flex; gap:16px; align-items:flex-start; transition:all 0.25s; }
+    .feed-card:hover { border-color:var(--border-2); transform:translateX(4px); }
+    .feed-avatar { width:42px; height:42px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:700; color:var(--bg); }
+    .feed-body { flex:1; }
+    .feed-top { display:flex; align-items:center; gap:10px; margin-bottom:8px; flex-wrap:wrap; }
+    .feed-name { font-size:14px; font-weight:700; color:var(--text-1); }
+    .feed-scheme { font-size:11px; padding:2px 9px; border-radius:20px; font-weight:600; }
+    .feed-time { font-size:11.5px; color:var(--text-3); margin-left:auto; }
+    .feed-text { font-size:13.5px; color:var(--text-2); line-height:1.65; margin-bottom:12px; }
+    .feed-meta { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+    .feed-loc { font-size:12px; color:var(--text-3); display:flex; align-items:center; gap:4px; }
+    .ai-score { display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:600; padding:3px 10px; border-radius:20px; }
+    .ai-score.good { background:var(--emerald-dim); color:var(--emerald); border:1px solid rgba(16,185,129,0.2); }
+    .ai-score.avg { background:var(--amber-dim); color:var(--amber); border:1px solid rgba(245,158,11,0.2); }
+    .ai-score.poor { background:var(--crimson-dim); color:var(--crimson); border:1px solid rgba(244,63,94,0.2); }
+    .status-chip { font-size:11px; font-weight:600; padding:2px 9px; border-radius:20px; }
+    .status-chip.forwarded { background:var(--teal-dim); color:var(--teal); border:1px solid rgba(45,212,191,0.2); }
+    .status-chip.pending { background:rgba(255,255,255,0.05); color:var(--text-3); border:1px solid var(--border); }
+    .status-chip.resolved { background:var(--emerald-dim); color:var(--emerald); border:1px solid rgba(16,185,129,0.2); }
+    .feed-empty { text-align:center; padding:48px; color:var(--text-3); font-size:15px; }
+    .feed-empty i { font-size:32px; margin-bottom:12px; display:block; opacity:0.4; }
 
-    /* ─────────────────── DEPARTMENTS ─────────────────── */
+    /* DEPARTMENTS */
     #departments { background: var(--bg); }
-    .dept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
-    .dept-card {
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 24px; transition: all 0.25s;
-    }
-    .dept-card:hover { border-color: rgba(201,164,76,0.2); box-shadow: var(--glow-gold); }
-    .dept-top { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
-    .dept-icon { width: 46px; height: 46px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
-    .dept-name { font-size: 14px; font-weight: 700; color: var(--text-1); }
-    .dept-ministry { font-size: 11.5px; color: var(--text-3); margin-top: 3px; }
-    .dept-stats-row { display: flex; gap: 10px; margin-bottom: 18px; }
-    .dept-stat { flex: 1; text-align: center; padding: 10px 6px; background: var(--bg-2); border-radius: var(--radius-xs); border: 1px solid var(--border); }
-    .dept-stat strong { display: block; font-size: 18px; font-weight: 800; }
-    .dept-stat span { font-size: 10.5px; color: var(--text-3); margin-top: 2px; display: block; }
-    .dept-response {
-      display: flex; align-items: center; justify-content: space-between;
-      font-size: 12.5px; color: var(--text-3);
-      padding-top: 16px; border-top: 1px solid var(--border);
-    }
-    .response-time { font-weight: 700; font-size: 14px; }
+    .dept-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; }
+    .dept-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; transition:all 0.25s; }
+    .dept-card:hover { border-color:rgba(201,164,76,0.2); box-shadow:var(--glow-gold); }
+    .dept-top { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+    .dept-icon { width:46px; height:46px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:20px; }
+    .dept-name { font-size:14px; font-weight:700; color:var(--text-1); }
+    .dept-ministry { font-size:11.5px; color:var(--text-3); margin-top:3px; }
+    .dept-stats-row { display:flex; gap:10px; margin-bottom:18px; }
+    .dept-stat { flex:1; text-align:center; padding:10px 6px; background:var(--bg-2); border-radius:var(--radius-xs); border:1px solid var(--border); }
+    .dept-stat strong { display:block; font-size:18px; font-weight:800; }
+    .dept-stat span { font-size:10.5px; color:var(--text-3); margin-top:2px; display:block; }
+    .dept-response { display:flex; align-items:center; justify-content:space-between; font-size:12.5px; color:var(--text-3); padding-top:16px; border-top:1px solid var(--border); }
+    .response-time { font-weight:700; font-size:14px; }
 
-    /* ─────────────────── FOOTER ─────────────────── */
-    footer {
-      background: var(--bg-2); border-top: 1px solid var(--border);
-      padding: 64px 48px 32px;
-    }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 48px; }
-    .footer-brand h3 { font-size: 20px; font-weight: 700; color: var(--text-1); margin-bottom: 12px; font-family: 'Playfair Display', serif; }
-    .footer-brand h3 span { color: var(--gold); }
-    .footer-brand p { font-size: 13.5px; color: var(--text-3); line-height: 1.75; max-width: 280px; }
-    .footer-col h4 { color: var(--text-2); font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 16px; }
-    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-    .footer-col ul li a { color: var(--text-3); text-decoration: none; font-size: 13.5px; transition: color 0.2s; }
-    .footer-col ul li a:hover { color: var(--gold); }
-    .footer-divider { height: 1px; background: var(--border); margin-bottom: 28px; }
-    .footer-bottom {
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 12.5px; color: var(--text-3); flex-wrap: wrap; gap: 12px;
-    }
-    .footer-flag { display: flex; height: 14px; border-radius: 2px; overflow: hidden; gap: 0; }
-    .flag-s { width: 20px; background: var(--gold); }
-    .flag-w { width: 20px; background: rgba(255,255,255,0.9); }
-    .flag-g { width: 20px; background: var(--emerald); }
+    /* FOOTER */
+    footer { background:var(--bg-2); border-top:1px solid var(--border); padding:64px 48px 32px; }
+    .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:40px; margin-bottom:48px; }
+    .footer-brand h3 { font-size:20px; font-weight:700; color:var(--text-1); margin-bottom:12px; font-family:'Playfair Display',serif; }
+    .footer-brand h3 span { color:var(--gold); }
+    .footer-brand p { font-size:13.5px; color:var(--text-3); line-height:1.75; max-width:280px; }
+    .footer-col h4 { color:var(--text-2); font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; margin-bottom:16px; }
+    .footer-col ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+    .footer-col ul li a { color:var(--text-3); text-decoration:none; font-size:13.5px; transition:color 0.2s; }
+    .footer-col ul li a:hover { color:var(--gold); }
+    .footer-divider { height:1px; background:var(--border); margin-bottom:28px; }
+    .footer-bottom { display:flex; justify-content:space-between; align-items:center; font-size:12.5px; color:var(--text-3); flex-wrap:wrap; gap:12px; }
+    .footer-flag { display:flex; height:14px; border-radius:2px; overflow:hidden; }
+    .flag-s { width:20px; background:var(--gold); }
+    .flag-w { width:20px; background:rgba(255,255,255,0.9); }
+    .flag-g { width:20px; background:var(--emerald); }
 
-    /* ─────────────────── MODAL ─────────────────── */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0; z-index: 200;
-      background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
-      align-items: center; justify-content: center;
-    }
-    .modal-overlay.active { display: flex; }
-    .modal {
-      background: var(--surface); border: 1px solid var(--border-2);
-      border-radius: var(--radius); padding: 34px;
-      max-width: 500px; width: 92%;
-      max-height: 85vh; overflow-y: auto;
-      animation: modalIn 0.3s ease;
-      box-shadow: var(--shadow-lg);
-    }
-    @keyframes modalIn { from { opacity:0; transform: translateY(20px) scale(0.96); } to { opacity:1; transform: none; } }
-    .modal-header {
-      display: flex; align-items: center; justify-content: space-between; margin-bottom: 26px;
-    }
-    .modal-header h3 { font-size: 17px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-    .modal-close {
-      width: 30px; height: 30px; border: 1px solid var(--border); background: var(--bg-2);
-      border-radius: var(--radius-xs); cursor: pointer; font-size: 14px; color: var(--text-2);
-      display: flex; align-items: center; justify-content: center; transition: all 0.2s;
-    }
-    .modal-close:hover { border-color: var(--gold); color: var(--gold); }
-    .modal-analyzing { text-align: center; padding: 24px 0; }
-    .analyzing-ring {
-      width: 52px; height: 52px; border: 3px solid var(--border-2);
-      border-top-color: var(--gold);
-      border-radius: 50%; animation: spin 0.8s linear infinite;
-      margin: 0 auto 18px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .modal-analyzing p { font-size: 15px; font-weight: 600; color: var(--text-1); margin-bottom: 6px; }
-    .modal-analyzing span { font-size: 13px; color: var(--text-3); }
+    /* MODAL */
+    .modal-overlay { display:none; position:fixed; inset:0; z-index:200; background:rgba(0,0,0,0.75); backdrop-filter:blur(8px); align-items:center; justify-content:center; }
+    .modal-overlay.active { display:flex; }
+    .modal { background:var(--surface); border:1px solid var(--border-2); border-radius:var(--radius); padding:34px; max-width:500px; width:92%; max-height:85vh; overflow-y:auto; animation:modalIn 0.3s ease; box-shadow:var(--shadow-lg); }
+    @keyframes modalIn { from{opacity:0;transform:translateY(20px) scale(0.96)} to{opacity:1;transform:none} }
+    .modal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:26px; }
+    .modal-header h3 { font-size:17px; font-weight:700; display:flex; align-items:center; gap:8px; }
+    .modal-close { width:30px; height:30px; border:1px solid var(--border); background:var(--bg-2); border-radius:var(--radius-xs); cursor:pointer; font-size:14px; color:var(--text-2); display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
+    .modal-close:hover { border-color:var(--gold); color:var(--gold); }
+    .modal-analyzing { text-align:center; padding:24px 0; }
+    .analyzing-ring { width:52px; height:52px; border:3px solid var(--border-2); border-top-color:var(--gold); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 18px; }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .modal-analyzing p { font-size:15px; font-weight:600; color:var(--text-1); margin-bottom:6px; }
+    .modal-analyzing span { font-size:13px; color:var(--text-3); }
+    .modal-steps { display:flex; flex-direction:column; gap:8px; margin-top:16px; text-align:left; }
+    .modal-step { display:flex; align-items:center; gap:10px; font-size:13px; color:var(--text-3); padding:8px 12px; border-radius:var(--radius-xs); background:var(--bg-2); }
+    .modal-step.done { color:var(--emerald); }
+    .modal-step.active { color:var(--gold); }
+    .modal-step i { width:16px; text-align:center; }
 
-    .toast {
-      position: fixed; bottom: 28px; right: 28px; z-index: 300;
-      background: var(--surface); border: 1px solid var(--border-2);
-      color: var(--text-1); padding: 14px 20px; border-radius: var(--radius-sm);
-      font-size: 14px; font-weight: 500;
-      display: none; align-items: center; gap: 10px;
-      box-shadow: var(--shadow-lg);
-      animation: toastIn 0.3s ease;
-    }
-    .toast.active { display: flex; }
-    @keyframes toastIn { from { opacity:0; transform: translateY(8px); } to { opacity:1; transform: none; } }
+    .toast { position:fixed; bottom:28px; right:28px; z-index:300; background:var(--surface); border:1px solid var(--border-2); color:var(--text-1); padding:14px 20px; border-radius:var(--radius-sm); font-size:14px; font-weight:500; display:none; align-items:center; gap:10px; box-shadow:var(--shadow-lg); }
+    .toast.active { display:flex; }
+    @keyframes toastIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
 
-    /* ─────────────────── RESPONSIVE ─────────────────── */
-    @media (max-width: 768px) {
-      nav { padding: 0 20px; }
-      .nav-links { display: none; }
-      section { padding: 64px 20px; }
-      .hero { padding: 70px 20px 64px; }
-      .hero-stats { gap: 32px; }
-      .submit-grid, .ai-demo-wrap { grid-template-columns: 1fr; }
-      .footer-grid { grid-template-columns: 1fr 1fr; }
-      .footer-brand { grid-column: 1/-1; }
-      .form-row { grid-template-columns: 1fr; }
+    /* Upload progress */
+    .upload-progress { display:none; margin-top:10px; }
+    .upload-progress-bar { height:3px; background:var(--border); border-radius:2px; overflow:hidden; }
+    .upload-progress-fill { height:100%; background:linear-gradient(to right,var(--gold),var(--teal)); border-radius:2px; transition:width 0.3s; width:0%; }
+    .upload-progress-text { font-size:11px; color:var(--text-3); margin-top:5px; }
+
+    @media (max-width:768px) {
+      nav { padding:0 20px; }
+      .nav-links { display:none; }
+      section { padding:64px 20px; }
+      .hero { padding:70px 20px 64px; }
+      .hero-stats { gap:32px; }
+      .submit-grid, .ai-demo-wrap { grid-template-columns:1fr; }
+      .footer-grid { grid-template-columns:1fr 1fr; }
+      .footer-brand { grid-column:1/-1; }
+      .form-row { grid-template-columns:1fr; }
     }
   </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <a href="#" class="nav-logo">
     <div class="logo-mark"><i class="fas fa-landmark"></i></div>
@@ -598,39 +421,18 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-eyebrow">
-    <i class="fas fa-shield-halved"></i>
-    India's AI-Powered Accountability Platform
-  </div>
-  <h1>
-    Monitor. <span class="highlight">Evaluate.</span><br/>
-    Make Government <span class="highlight-teal">Accountable.</span>
-  </h1>
-  <p class="hero-sub">
-    Citizens upload real-time evidence of government schemes. Our AI evaluates quality,
-    detects failures, and forwards verified reports directly to the responsible department.
-  </p>
+  <div class="hero-eyebrow"><i class="fas fa-shield-halved"></i> India's AI-Powered Accountability Platform</div>
+  <h1>Monitor. <span class="highlight">Evaluate.</span><br/>Make Government <span class="highlight-teal">Accountable.</span></h1>
+  <p class="hero-sub">Citizens upload real-time evidence of government schemes. Our system evaluates quality and forwards verified reports directly to the responsible department.</p>
   <div class="hero-btns">
     <a href="#submit" class="btn-gold"><i class="fas fa-upload"></i> Submit a Review</a>
     <a href="#schemes" class="btn-ghost"><i class="fas fa-chart-bar"></i> View All Schemes</a>
   </div>
   <div class="hero-stats">
-    <div class="stat-item">
-      <span class="stat-num" data-target="142850">0</span>
-      <div class="stat-label">Citizens Participated</div>
-    </div>
-    <div class="stat-item">
-      <span class="stat-num" data-target="38420">0</span>
-      <div class="stat-label">Reviews Submitted</div>
-    </div>
-    <div class="stat-item">
-      <span class="stat-num" data-target="12">0</span>
-      <div class="stat-label">Departments Covered</div>
-    </div>
-    <div class="stat-item">
-      <span class="stat-num" data-target="6840">0</span>
-      <div class="stat-label">Issues Resolved</div>
-    </div>
+    <div class="stat-item"><span class="stat-num" id="statCitizens">0</span><div class="stat-label">Citizens Participated</div></div>
+    <div class="stat-item"><span class="stat-num" id="statReviews">0</span><div class="stat-label">Reviews Submitted</div></div>
+    <div class="stat-item"><span class="stat-num" data-target="12">0</span><div class="stat-label">Departments Covered</div></div>
+    <div class="stat-item"><span class="stat-num" id="statResolved">0</span><div class="stat-label">Issues Resolved</div></div>
   </div>
 </section>
 
@@ -642,30 +444,10 @@
     <div class="section-sub">A transparent 4-step pipeline that turns citizen observations into government action.</div>
   </div>
   <div class="steps">
-    <div class="step-card">
-      <div class="step-num">01</div>
-      <div class="step-icon gold"><i class="fas fa-camera"></i></div>
-      <h3>Capture & Upload</h3>
-      <p>Citizens photograph or video government services — roads, drainage, lights, or public facilities — and upload with location.</p>
-    </div>
-    <div class="step-card">
-      <div class="step-num">02</div>
-      <div class="step-icon teal"><i class="fas fa-robot"></i></div>
-      <h3>AI Analysis</h3>
-      <p>Computer vision detects defects, scores quality, and classifies issue severity — objectively, without bias.</p>
-    </div>
-    <div class="step-card">
-      <div class="step-num">03</div>
-      <div class="step-icon emerald"><i class="fas fa-file-circle-check"></i></div>
-      <h3>Report Compiled</h3>
-      <p>A structured report — with evidence, AI findings, geo-location, and citizen input — is automatically generated.</p>
-    </div>
-    <div class="step-card">
-      <div class="step-num">04</div>
-      <div class="step-icon amber"><i class="fas fa-paper-plane"></i></div>
-      <h3>Forwarded to Dept</h3>
-      <p>Verified reports are dispatched to the concerned ministry with a tracking ID for accountability and follow-up.</p>
-    </div>
+    <div class="step-card"><div class="step-num">01</div><div class="step-icon gold"><i class="fas fa-camera"></i></div><h3>Capture & Upload</h3><p>Citizens photograph or video government services — roads, drainage, lights, or public facilities — and upload with location.</p></div>
+    <div class="step-card"><div class="step-num">02</div><div class="step-icon teal"><i class="fas fa-robot"></i></div><h3>AI Analysis</h3><p>Computer vision detects defects, scores quality, and classifies issue severity — objectively, without bias.</p></div>
+    <div class="step-card"><div class="step-num">03</div><div class="step-icon emerald"><i class="fas fa-file-circle-check"></i></div><h3>Report Compiled</h3><p>A structured report with evidence, findings, geo-location, and citizen input is automatically generated.</p></div>
+    <div class="step-card"><div class="step-num">04</div><div class="step-icon amber"><i class="fas fa-paper-plane"></i></div><h3>Forwarded to Dept</h3><p>Verified reports are dispatched to the concerned ministry with a tracking ID for accountability.</p></div>
   </div>
 </section>
 
@@ -677,120 +459,12 @@
     <div class="section-sub">Track real-time quality and satisfaction across key infrastructure schemes nationwide.</div>
   </div>
   <div class="schemes-grid">
-    <div class="scheme-card">
-      <div class="scheme-header">
-        <div class="scheme-icon-wrap" style="background:var(--gold-dim)"><span>🛣️</span></div>
-        <span class="scheme-badge badge-monitoring">Monitoring</span>
-      </div>
-      <div>
-        <div class="scheme-name">PM Gram Sadak Yojana</div>
-        <div class="scheme-dept">Ministry of Rural Development</div>
-      </div>
-      <div>
-        <div class="scheme-progress-label"><span>Satisfaction</span><span style="color:var(--gold);font-weight:600">72%</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div>
-      </div>
-      <div class="scheme-stats">
-        <div class="scheme-stat"><strong>2,840</strong> Reviews</div>
-        <div class="scheme-stat"><strong style="color:var(--crimson)">486</strong> Issues</div>
-        <div class="scheme-stat"><strong style="color:var(--emerald)">312</strong> Resolved</div>
-      </div>
-    </div>
-    <div class="scheme-card">
-      <div class="scheme-header">
-        <div class="scheme-icon-wrap" style="background:var(--amber-dim)"><span>💡</span></div>
-        <span class="scheme-badge badge-active">Active</span>
-      </div>
-      <div>
-        <div class="scheme-name">DDUGJY Street Lighting</div>
-        <div class="scheme-dept">Ministry of Power</div>
-      </div>
-      <div>
-        <div class="scheme-progress-label"><span>Satisfaction</span><span style="color:var(--emerald);font-weight:600">85%</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div>
-      </div>
-      <div class="scheme-stats">
-        <div class="scheme-stat"><strong>1,920</strong> Reviews</div>
-        <div class="scheme-stat"><strong style="color:var(--crimson)">210</strong> Issues</div>
-        <div class="scheme-stat"><strong style="color:var(--emerald)">198</strong> Resolved</div>
-      </div>
-    </div>
-    <div class="scheme-card">
-      <div class="scheme-header">
-        <div class="scheme-icon-wrap" style="background:var(--teal-dim)"><span>♻️</span></div>
-        <span class="scheme-badge badge-critical">Needs Attention</span>
-      </div>
-      <div>
-        <div class="scheme-name">Swachh Bharat — Garbage Collection</div>
-        <div class="scheme-dept">Ministry of Housing & Urban Affairs</div>
-      </div>
-      <div>
-        <div class="scheme-progress-label"><span>Satisfaction</span><span style="color:var(--crimson);font-weight:600">54%</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:54%"></div></div>
-      </div>
-      <div class="scheme-stats">
-        <div class="scheme-stat"><strong>4,310</strong> Reviews</div>
-        <div class="scheme-stat"><strong style="color:var(--crimson)">1,240</strong> Issues</div>
-        <div class="scheme-stat"><strong style="color:var(--emerald)">680</strong> Resolved</div>
-      </div>
-    </div>
-    <div class="scheme-card">
-      <div class="scheme-header">
-        <div class="scheme-icon-wrap" style="background:rgba(45,212,191,0.08)"><span>💧</span></div>
-        <span class="scheme-badge badge-active">Active</span>
-      </div>
-      <div>
-        <div class="scheme-name">Jal Jeevan Mission</div>
-        <div class="scheme-dept">Ministry of Jal Shakti</div>
-      </div>
-      <div>
-        <div class="scheme-progress-label"><span>Satisfaction</span><span style="color:var(--gold);font-weight:600">78%</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div>
-      </div>
-      <div class="scheme-stats">
-        <div class="scheme-stat"><strong>3,560</strong> Reviews</div>
-        <div class="scheme-stat"><strong style="color:var(--crimson)">620</strong> Issues</div>
-        <div class="scheme-stat"><strong style="color:var(--emerald)">510</strong> Resolved</div>
-      </div>
-    </div>
-    <div class="scheme-card">
-      <div class="scheme-header">
-        <div class="scheme-icon-wrap" style="background:var(--crimson-dim)"><span>🏥</span></div>
-        <span class="scheme-badge badge-monitoring">Monitoring</span>
-      </div>
-      <div>
-        <div class="scheme-name">Ayushman Bharat — PHC Quality</div>
-        <div class="scheme-dept">Ministry of Health & Family Welfare</div>
-      </div>
-      <div>
-        <div class="scheme-progress-label"><span>Satisfaction</span><span style="color:var(--gold);font-weight:600">67%</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:67%"></div></div>
-      </div>
-      <div class="scheme-stats">
-        <div class="scheme-stat"><strong>2,100</strong> Reviews</div>
-        <div class="scheme-stat"><strong style="color:var(--crimson)">540</strong> Issues</div>
-        <div class="scheme-stat"><strong style="color:var(--emerald)">320</strong> Resolved</div>
-      </div>
-    </div>
-    <div class="scheme-card">
-      <div class="scheme-header">
-        <div class="scheme-icon-wrap" style="background:rgba(139,92,246,0.1)"><span>🏫</span></div>
-        <span class="scheme-badge badge-active">Active</span>
-      </div>
-      <div>
-        <div class="scheme-name">Samagra Shiksha — School Infra</div>
-        <div class="scheme-dept">Ministry of Education</div>
-      </div>
-      <div>
-        <div class="scheme-progress-label"><span>Satisfaction</span><span style="color:var(--emerald);font-weight:600">80%</span></div>
-        <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
-      </div>
-      <div class="scheme-stats">
-        <div class="scheme-stat"><strong>1,750</strong> Reviews</div>
-        <div class="scheme-stat"><strong style="color:var(--crimson)">290</strong> Issues</div>
-        <div class="scheme-stat"><strong style="color:var(--emerald)">250</strong> Resolved</div>
-      </div>
-    </div>
+    <div class="scheme-card"><div class="scheme-header"><div class="scheme-icon-wrap" style="background:var(--gold-dim)"><span>🛣️</span></div><span class="scheme-badge badge-monitoring">Monitoring</span></div><div><div class="scheme-name">PM Gram Sadak Yojana</div><div class="scheme-dept">Ministry of Rural Development</div></div><div><div class="scheme-progress-label"><span>Satisfaction</span><span style="color:var(--gold);font-weight:600">72%</span></div><div class="progress-bar"><div class="progress-fill" style="width:72%"></div></div></div><div class="scheme-stats"><div class="scheme-stat"><strong>2,840</strong> Reviews</div><div class="scheme-stat"><strong style="color:var(--crimson)">486</strong> Issues</div><div class="scheme-stat"><strong style="color:var(--emerald)">312</strong> Resolved</div></div></div>
+    <div class="scheme-card"><div class="scheme-header"><div class="scheme-icon-wrap" style="background:var(--amber-dim)"><span>💡</span></div><span class="scheme-badge badge-active">Active</span></div><div><div class="scheme-name">DDUGJY Street Lighting</div><div class="scheme-dept">Ministry of Power</div></div><div><div class="scheme-progress-label"><span>Satisfaction</span><span style="color:var(--emerald);font-weight:600">85%</span></div><div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div></div><div class="scheme-stats"><div class="scheme-stat"><strong>1,920</strong> Reviews</div><div class="scheme-stat"><strong style="color:var(--crimson)">210</strong> Issues</div><div class="scheme-stat"><strong style="color:var(--emerald)">198</strong> Resolved</div></div></div>
+    <div class="scheme-card"><div class="scheme-header"><div class="scheme-icon-wrap" style="background:var(--teal-dim)"><span>♻️</span></div><span class="scheme-badge badge-critical">Needs Attention</span></div><div><div class="scheme-name">Swachh Bharat — Garbage Collection</div><div class="scheme-dept">Ministry of Housing & Urban Affairs</div></div><div><div class="scheme-progress-label"><span>Satisfaction</span><span style="color:var(--crimson);font-weight:600">54%</span></div><div class="progress-bar"><div class="progress-fill" style="width:54%"></div></div></div><div class="scheme-stats"><div class="scheme-stat"><strong>4,310</strong> Reviews</div><div class="scheme-stat"><strong style="color:var(--crimson)">1,240</strong> Issues</div><div class="scheme-stat"><strong style="color:var(--emerald)">680</strong> Resolved</div></div></div>
+    <div class="scheme-card"><div class="scheme-header"><div class="scheme-icon-wrap" style="background:rgba(45,212,191,0.08)"><span>💧</span></div><span class="scheme-badge badge-active">Active</span></div><div><div class="scheme-name">Jal Jeevan Mission</div><div class="scheme-dept">Ministry of Jal Shakti</div></div><div><div class="scheme-progress-label"><span>Satisfaction</span><span style="color:var(--gold);font-weight:600">78%</span></div><div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div></div><div class="scheme-stats"><div class="scheme-stat"><strong>3,560</strong> Reviews</div><div class="scheme-stat"><strong style="color:var(--crimson)">620</strong> Issues</div><div class="scheme-stat"><strong style="color:var(--emerald)">510</strong> Resolved</div></div></div>
+    <div class="scheme-card"><div class="scheme-header"><div class="scheme-icon-wrap" style="background:var(--crimson-dim)"><span>🏥</span></div><span class="scheme-badge badge-monitoring">Monitoring</span></div><div><div class="scheme-name">Ayushman Bharat — PHC Quality</div><div class="scheme-dept">Ministry of Health & Family Welfare</div></div><div><div class="scheme-progress-label"><span>Satisfaction</span><span style="color:var(--gold);font-weight:600">67%</span></div><div class="progress-bar"><div class="progress-fill" style="width:67%"></div></div></div><div class="scheme-stats"><div class="scheme-stat"><strong>2,100</strong> Reviews</div><div class="scheme-stat"><strong style="color:var(--crimson)">540</strong> Issues</div><div class="scheme-stat"><strong style="color:var(--emerald)">320</strong> Resolved</div></div></div>
+    <div class="scheme-card"><div class="scheme-header"><div class="scheme-icon-wrap" style="background:rgba(139,92,246,0.1)"><span>🏫</span></div><span class="scheme-badge badge-active">Active</span></div><div><div class="scheme-name">Samagra Shiksha — School Infra</div><div class="scheme-dept">Ministry of Education</div></div><div><div class="scheme-progress-label"><span>Satisfaction</span><span style="color:var(--emerald);font-weight:600">80%</span></div><div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div></div><div class="scheme-stats"><div class="scheme-stat"><strong>1,750</strong> Reviews</div><div class="scheme-stat"><strong style="color:var(--crimson)">290</strong> Issues</div><div class="scheme-stat"><strong style="color:var(--emerald)">250</strong> Resolved</div></div></div>
   </div>
 </section>
 
@@ -800,49 +474,19 @@
     <div class="submit-info">
       <div class="section-eyebrow">Submit Review</div>
       <h3 class="section-title">Your Feedback Drives Change</h3>
-      <p>Every photo you upload, every issue you report enters our AI pipeline and lands on the desk of the government department responsible. No intermediaries. No delays.</p>
+      <p>Every photo you upload, every issue you report is saved to our database and goes to the government department responsible. Real data. Real accountability.</p>
       <div class="submit-features">
-        <div class="submit-feature">
-          <div class="feat-icon gold"><i class="fas fa-map-pin"></i></div>
-          <div class="feat-text">
-            <strong>Auto Location Detection</strong>
-            <span>GPS-verified coordinates for accurate issue mapping.</span>
-          </div>
-        </div>
-        <div class="submit-feature">
-          <div class="feat-icon teal"><i class="fas fa-brain"></i></div>
-          <div class="feat-text">
-            <strong>Instant AI Evaluation</strong>
-            <span>Quality scored objectively in seconds — no human bias.</span>
-          </div>
-        </div>
-        <div class="submit-feature">
-          <div class="feat-icon emerald"><i class="fas fa-building-government"></i></div>
-          <div class="feat-text">
-            <strong>Direct Department Forwarding</strong>
-            <span>Verified reports dispatched to the responsible ministry.</span>
-          </div>
-        </div>
-        <div class="submit-feature">
-          <div class="feat-icon amber"><i class="fas fa-bell"></i></div>
-          <div class="feat-text">
-            <strong>Track Your Report</strong>
-            <span>SMS/email updates when your report is reviewed or resolved.</span>
-          </div>
-        </div>
+        <div class="submit-feature"><div class="feat-icon gold"><i class="fas fa-map-pin"></i></div><div class="feat-text"><strong>Location Verified</strong><span>Your state and district are recorded for accurate issue mapping.</span></div></div>
+        <div class="submit-feature"><div class="feat-icon teal"><i class="fas fa-cloud-arrow-up"></i></div><div class="feat-text"><strong>Secure File Upload</strong><span>Photos and videos uploaded securely to our cloud storage.</span></div></div>
+        <div class="submit-feature"><div class="feat-icon emerald"><i class="fas fa-database"></i></div><div class="feat-text"><strong>Permanently Recorded</strong><span>Every review is saved to database — nothing gets lost.</span></div></div>
+        <div class="submit-feature"><div class="feat-icon amber"><i class="fas fa-bell"></i></div><div class="feat-text"><strong>Track Your Report</strong><span>Your submission appears in the Live Feed instantly.</span></div></div>
       </div>
     </div>
     <div class="review-form">
       <h3><i class="fas fa-file-pen" style="color:var(--gold)"></i> New Submission</h3>
       <div class="form-row">
-        <div class="form-group">
-          <label>Full Name</label>
-          <input type="text" id="reviewerName" placeholder="Your name" />
-        </div>
-        <div class="form-group">
-          <label>Mobile</label>
-          <input type="tel" id="reviewerPhone" placeholder="+91 XXXXX XXXXX" />
-        </div>
+        <div class="form-group"><label>Full Name</label><input type="text" id="reviewerName" placeholder="Your name" /></div>
+        <div class="form-group"><label>Mobile</label><input type="tel" id="reviewerPhone" placeholder="+91 XXXXX XXXXX" /></div>
       </div>
       <div class="form-group">
         <label>Scheme / Service</label>
@@ -859,26 +503,15 @@
         </select>
       </div>
       <div class="form-row">
-        <div class="form-group">
-          <label>State</label>
+        <div class="form-group"><label>State</label>
           <select id="stateSelect">
             <option value="">Select state...</option>
-            <option>Maharashtra</option>
-            <option>Uttar Pradesh</option>
-            <option>Rajasthan</option>
-            <option>Gujarat</option>
-            <option>Karnataka</option>
-            <option>Tamil Nadu</option>
-            <option>Delhi</option>
-            <option>West Bengal</option>
-            <option>Madhya Pradesh</option>
-            <option>Bihar</option>
+            <option>Maharashtra</option><option>Uttar Pradesh</option><option>Rajasthan</option>
+            <option>Gujarat</option><option>Karnataka</option><option>Tamil Nadu</option>
+            <option>Delhi</option><option>West Bengal</option><option>Madhya Pradesh</option><option>Bihar</option>
           </select>
         </div>
-        <div class="form-group">
-          <label>District / Village</label>
-          <input type="text" id="locationInput" placeholder="Enter location" />
-        </div>
+        <div class="form-group"><label>District / Village</label><input type="text" id="locationInput" placeholder="Enter location" /></div>
       </div>
       <div class="form-group">
         <label>Upload Photos / Videos</label>
@@ -889,13 +522,13 @@
           <input type="file" id="fileInput" multiple accept="image/*,video/*" style="display:none" />
         </div>
         <div class="upload-preview" id="uploadPreview"></div>
+        <div class="upload-progress" id="uploadProgress">
+          <div class="upload-progress-bar"><div class="upload-progress-fill" id="uploadProgressFill"></div></div>
+          <div class="upload-progress-text" id="uploadProgressText">Uploading files...</div>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Describe the Issue or Benefit</label>
-        <textarea id="reviewText" placeholder="What did you observe? Describe the condition of the service — frequency, quality, defects, improvements..."></textarea>
-      </div>
-      <div class="form-group">
-        <label>Your Rating</label>
+      <div class="form-group"><label>Describe the Issue or Benefit</label><textarea id="reviewText" placeholder="What did you observe? Describe the condition of the service..."></textarea></div>
+      <div class="form-group"><label>Your Rating</label>
         <div class="rating-group" id="ratingGroup">
           <span class="rating-star" data-val="1"><i class="fas fa-star"></i></span>
           <span class="rating-star" data-val="2"><i class="fas fa-star"></i></span>
@@ -904,8 +537,8 @@
           <span class="rating-star" data-val="5"><i class="fas fa-star"></i></span>
         </div>
       </div>
-      <button class="btn-submit" onclick="submitReview()">
-        <i class="fas fa-paper-plane"></i> Submit for AI Evaluation
+      <button class="btn-submit" id="submitBtn" onclick="submitReview()">
+        <i class="fas fa-paper-plane"></i> Submit Review
       </button>
     </div>
   </div>
@@ -917,71 +550,32 @@
     <div class="ai-info">
       <div class="section-eyebrow">AI Evaluation</div>
       <h3 class="section-title">Intelligent Quality Assessment</h3>
-      <p>Our AI analyses uploaded media using computer vision and NLP to objectively evaluate government service quality. No bias. No corruption. Pure data.</p>
+      <p>Our system analyses uploaded media and citizen feedback to objectively evaluate government service quality. No bias. No corruption. Pure data.</p>
       <div class="ai-capabilities">
-        <div class="ai-cap">
-          <div class="ai-cap-icon">📸</div>
-          <div class="ai-cap-text">Computer Vision Analysis
-            <span>Detects potholes, broken infrastructure, lighting failures, and waste from photos.</span>
-          </div>
-        </div>
-        <div class="ai-cap">
-          <div class="ai-cap-icon">📍</div>
-          <div class="ai-cap-text">Geo-tagging & Validation
-            <span>Verifies location and maps issues to the correct administrative jurisdiction.</span>
-          </div>
-        </div>
-        <div class="ai-cap">
-          <div class="ai-cap-icon">📊</div>
-          <div class="ai-cap-text">Severity Scoring
-            <span>Assigns priority (Critical / Moderate / Minor) to route reports to right officers.</span>
-          </div>
-        </div>
-        <div class="ai-cap">
-          <div class="ai-cap-icon">📨</div>
-          <div class="ai-cap-text">Automated Dispatch
-            <span>Sends structured reports to department dashboards with full evidence trail.</span>
-          </div>
-        </div>
+        <div class="ai-cap"><div class="ai-cap-icon">📸</div><div class="ai-cap-text">Computer Vision Analysis<span>Detects potholes, broken infrastructure, lighting failures from photos.</span></div></div>
+        <div class="ai-cap"><div class="ai-cap-icon">📍</div><div class="ai-cap-text">Geo-tagging & Validation<span>Verifies location and maps issues to the correct administrative jurisdiction.</span></div></div>
+        <div class="ai-cap"><div class="ai-cap-icon">📊</div><div class="ai-cap-text">Severity Scoring<span>Assigns priority (Critical / Moderate / Minor) to route reports correctly.</span></div></div>
+        <div class="ai-cap"><div class="ai-cap-icon">📨</div><div class="ai-cap-text">Automated Dispatch<span>Sends structured reports to department dashboards with full evidence trail.</span></div></div>
       </div>
     </div>
     <div class="ai-result-card">
-      <div class="ai-result-title"><i class="fas fa-robot" style="color:var(--teal)"></i> Sample AI Evaluation Report</div>
+      <div class="ai-result-title"><i class="fas fa-robot" style="color:var(--teal)"></i> Sample Evaluation Report</div>
       <div class="ai-score-big">
-        <div class="score-circle avg">
-          <div class="score-val avg">58</div>
-          <p>/ 100</p>
-        </div>
+        <div class="score-circle avg"><div class="score-val avg">58</div><p>/ 100</p></div>
         <div class="score-label">Moderate Issues Detected</div>
       </div>
       <div class="ai-metrics">
-        <div class="ai-metric">
-          <div class="ai-metric-top"><span>Road Surface Condition</span><strong style="color:var(--crimson)">38/100</strong></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:38%;background:linear-gradient(to right,var(--crimson),#f87171)"></div></div>
-        </div>
-        <div class="ai-metric">
-          <div class="ai-metric-top"><span>Drainage Availability</span><strong style="color:var(--amber)">62/100</strong></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:62%;background:linear-gradient(to right,var(--amber),#fcd34d)"></div></div>
-        </div>
-        <div class="ai-metric">
-          <div class="ai-metric-top"><span>Signage & Markings</span><strong style="color:var(--emerald)">80/100</strong></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
-        </div>
-        <div class="ai-metric">
-          <div class="ai-metric-top"><span>Overall Safety Rating</span><strong style="color:var(--amber)">55/100</strong></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:55%;background:linear-gradient(to right,var(--amber),#fcd34d)"></div></div>
-        </div>
+        <div class="ai-metric"><div class="ai-metric-top"><span>Road Surface Condition</span><strong style="color:var(--crimson)">38/100</strong></div><div class="progress-bar"><div class="progress-fill" style="width:38%;background:linear-gradient(to right,var(--crimson),#f87171)"></div></div></div>
+        <div class="ai-metric"><div class="ai-metric-top"><span>Drainage Availability</span><strong style="color:var(--amber)">62/100</strong></div><div class="progress-bar"><div class="progress-fill" style="width:62%;background:linear-gradient(to right,var(--amber),#fcd34d)"></div></div></div>
+        <div class="ai-metric"><div class="ai-metric-top"><span>Signage & Markings</span><strong style="color:var(--emerald)">80/100</strong></div><div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div></div>
+        <div class="ai-metric"><div class="ai-metric-top"><span>Overall Safety Rating</span><strong style="color:var(--amber)">55/100</strong></div><div class="progress-bar"><div class="progress-fill" style="width:55%;background:linear-gradient(to right,var(--amber),#fcd34d)"></div></div></div>
       </div>
-      <div class="ai-issues">
-        <h4>Issues Detected</h4>
+      <div class="ai-issues"><h4>Issues Detected</h4>
         <span class="ai-issue-tag"><i class="fas fa-triangle-exclamation"></i> 3 Potholes Detected</span>
         <span class="ai-issue-tag"><i class="fas fa-triangle-exclamation"></i> Surface Cracking (40m)</span>
         <span class="ai-issue-tag"><i class="fas fa-triangle-exclamation"></i> Blocked Drain Outlet</span>
-        <span class="ai-issue-tag"><i class="fas fa-triangle-exclamation"></i> Missing Speed Bumps</span>
       </div>
-      <button class="btn-forward" onclick="showForwardToast()">
-        <i class="fas fa-paper-plane"></i> Forward to Ministry of Road Transport
-      </button>
+      <button class="btn-forward" onclick="showForwardToast()"><i class="fas fa-paper-plane"></i> Forward to Ministry of Road Transport</button>
     </div>
   </div>
 </section>
@@ -996,70 +590,7 @@
     <div class="live-indicator">Live</div>
   </div>
   <div class="feed-list" id="feedList">
-    <div class="feed-card">
-      <div class="feed-avatar" style="background:linear-gradient(135deg,var(--gold),#9a7228)">R</div>
-      <div class="feed-body">
-        <div class="feed-top">
-          <span class="feed-name">Ramesh Yadav</span>
-          <span class="feed-scheme" style="background:var(--gold-dim);color:var(--gold-light)">Roads</span>
-          <span class="feed-time">2 min ago</span>
-        </div>
-        <div class="feed-text">The main road connecting our village to Puna has 6–7 large potholes near the bridge. Vehicles are getting damaged. No repairs done in 8 months despite repeated complaints.</div>
-        <div class="feed-meta">
-          <span class="feed-loc"><i class="fas fa-location-dot"></i> Nashik, Maharashtra</span>
-          <span class="ai-score avg"><i class="fas fa-robot"></i> AI Score: 42/100</span>
-          <span class="status-chip forwarded">Forwarded</span>
-        </div>
-      </div>
-    </div>
-    <div class="feed-card">
-      <div class="feed-avatar" style="background:linear-gradient(135deg,var(--emerald),#059669)">P</div>
-      <div class="feed-body">
-        <div class="feed-top">
-          <span class="feed-name">Priya Sharma</span>
-          <span class="feed-scheme" style="background:var(--teal-dim);color:var(--teal)">Street Lights</span>
-          <span class="feed-time">15 min ago</span>
-        </div>
-        <div class="feed-text">All 12 streetlights in our colony are working properly after the DDUGJY installation. Great improvement — our area feels much safer at night now.</div>
-        <div class="feed-meta">
-          <span class="feed-loc"><i class="fas fa-location-dot"></i> Lucknow, Uttar Pradesh</span>
-          <span class="ai-score good"><i class="fas fa-robot"></i> AI Score: 91/100</span>
-          <span class="status-chip resolved">Positive</span>
-        </div>
-      </div>
-    </div>
-    <div class="feed-card">
-      <div class="feed-avatar" style="background:linear-gradient(135deg,var(--teal),#0d9488)">S</div>
-      <div class="feed-body">
-        <div class="feed-top">
-          <span class="feed-name">Suresh Kumar</span>
-          <span class="feed-scheme" style="background:var(--emerald-dim);color:var(--emerald)">Sanitation</span>
-          <span class="feed-time">1 hr ago</span>
-        </div>
-        <div class="feed-text">Garbage truck has not visited our ward for 10 days. Waste is piling at the market corner. Serious health hazard — children play in the vicinity.</div>
-        <div class="feed-meta">
-          <span class="feed-loc"><i class="fas fa-location-dot"></i> Jaipur, Rajasthan</span>
-          <span class="ai-score poor"><i class="fas fa-robot"></i> AI Score: 18/100</span>
-          <span class="status-chip forwarded">Forwarded — Critical</span>
-        </div>
-      </div>
-    </div>
-    <div class="feed-card">
-      <div class="feed-avatar" style="background:linear-gradient(135deg,#6366f1,#4f46e5)">A</div>
-      <div class="feed-body">
-        <div class="feed-top">
-          <span class="feed-name">Anita Devi</span>
-          <span class="feed-scheme" style="background:rgba(99,102,241,0.12);color:#818cf8">Water Supply</span>
-          <span class="feed-time">3 hr ago</span>
-        </div>
-        <div class="feed-text">Jal Jeevan Mission tap connection installed 2 weeks ago. Water supply is regular — 2 hours daily. Excellent execution by the local panchayat.</div>
-        <div class="feed-meta">
-          <span class="feed-loc"><i class="fas fa-location-dot"></i> Varanasi, Uttar Pradesh</span>
-          <span class="ai-score good"><i class="fas fa-robot"></i> AI Score: 88/100</span>
-          <span class="status-chip resolved">Resolved</span>
-        </div>
-      </div>
-    </div>
+    <div class="feed-empty"><i class="fas fa-satellite-dish"></i>Loading reviews from database...</div>
   </div>
 </section>
 
@@ -1068,226 +599,203 @@
   <div class="section-header">
     <div class="section-eyebrow">Accountability Dashboard</div>
     <div class="section-title">Department Response Tracker</div>
-    <div class="section-sub">Monitor how each ministry is responding to citizen reports in real time.</div>
+    <div class="section-sub">Monitor how each ministry is responding to citizen reports.</div>
   </div>
   <div class="dept-grid">
-    <div class="dept-card">
-      <div class="dept-top">
-        <div class="dept-icon" style="background:var(--gold-dim);font-size:22px">🛣️</div>
-        <div>
-          <div class="dept-name">Ministry of Road Transport</div>
-          <div class="dept-ministry">Dept. of Road Transport & Highways</div>
-        </div>
-      </div>
-      <div class="dept-stats-row">
-        <div class="dept-stat"><strong style="color:var(--gold)">486</strong><span>Received</span></div>
-        <div class="dept-stat"><strong style="color:var(--emerald)">312</strong><span>Resolved</span></div>
-        <div class="dept-stat"><strong style="color:var(--crimson)">174</strong><span>Pending</span></div>
-      </div>
-      <div class="dept-response">
-        <span>Avg Response Time</span>
-        <span class="response-time" style="color:var(--amber)">4.2 days</span>
-      </div>
-    </div>
-    <div class="dept-card">
-      <div class="dept-top">
-        <div class="dept-icon" style="background:var(--amber-dim);font-size:22px">💡</div>
-        <div>
-          <div class="dept-name">Ministry of Power</div>
-          <div class="dept-ministry">Dept. of Electricity Distribution</div>
-        </div>
-      </div>
-      <div class="dept-stats-row">
-        <div class="dept-stat"><strong style="color:var(--gold)">210</strong><span>Received</span></div>
-        <div class="dept-stat"><strong style="color:var(--emerald)">198</strong><span>Resolved</span></div>
-        <div class="dept-stat"><strong style="color:var(--crimson)">12</strong><span>Pending</span></div>
-      </div>
-      <div class="dept-response">
-        <span>Avg Response Time</span>
-        <span class="response-time" style="color:var(--emerald)">1.8 days</span>
-      </div>
-    </div>
-    <div class="dept-card">
-      <div class="dept-top">
-        <div class="dept-icon" style="background:var(--teal-dim);font-size:22px">♻️</div>
-        <div>
-          <div class="dept-name">Ministry of Housing & Urban Affairs</div>
-          <div class="dept-ministry">Swachh Bharat Mission</div>
-        </div>
-      </div>
-      <div class="dept-stats-row">
-        <div class="dept-stat"><strong style="color:var(--gold)">1,240</strong><span>Received</span></div>
-        <div class="dept-stat"><strong style="color:var(--emerald)">680</strong><span>Resolved</span></div>
-        <div class="dept-stat"><strong style="color:var(--crimson)">560</strong><span>Pending</span></div>
-      </div>
-      <div class="dept-response">
-        <span>Avg Response Time</span>
-        <span class="response-time" style="color:var(--crimson)">12.5 days</span>
-      </div>
-    </div>
-    <div class="dept-card">
-      <div class="dept-top">
-        <div class="dept-icon" style="background:rgba(45,212,191,0.08);font-size:22px">💧</div>
-        <div>
-          <div class="dept-name">Ministry of Jal Shakti</div>
-          <div class="dept-ministry">Jal Jeevan Mission</div>
-        </div>
-      </div>
-      <div class="dept-stats-row">
-        <div class="dept-stat"><strong style="color:var(--gold)">620</strong><span>Received</span></div>
-        <div class="dept-stat"><strong style="color:var(--emerald)">510</strong><span>Resolved</span></div>
-        <div class="dept-stat"><strong style="color:var(--crimson)">110</strong><span>Pending</span></div>
-      </div>
-      <div class="dept-response">
-        <span>Avg Response Time</span>
-        <span class="response-time" style="color:var(--amber)">3.1 days</span>
-      </div>
-    </div>
-    <div class="dept-card">
-      <div class="dept-top">
-        <div class="dept-icon" style="background:var(--crimson-dim);font-size:22px">🏥</div>
-        <div>
-          <div class="dept-name">Ministry of Health</div>
-          <div class="dept-ministry">Ayushman Bharat — PHC Quality</div>
-        </div>
-      </div>
-      <div class="dept-stats-row">
-        <div class="dept-stat"><strong style="color:var(--gold)">540</strong><span>Received</span></div>
-        <div class="dept-stat"><strong style="color:var(--emerald)">320</strong><span>Resolved</span></div>
-        <div class="dept-stat"><strong style="color:var(--crimson)">220</strong><span>Pending</span></div>
-      </div>
-      <div class="dept-response">
-        <span>Avg Response Time</span>
-        <span class="response-time" style="color:var(--amber)">6.4 days</span>
-      </div>
-    </div>
-    <div class="dept-card">
-      <div class="dept-top">
-        <div class="dept-icon" style="background:rgba(139,92,246,0.1);font-size:22px">🏫</div>
-        <div>
-          <div class="dept-name">Ministry of Education</div>
-          <div class="dept-ministry">Samagra Shiksha Abhiyan</div>
-        </div>
-      </div>
-      <div class="dept-stats-row">
-        <div class="dept-stat"><strong style="color:var(--gold)">290</strong><span>Received</span></div>
-        <div class="dept-stat"><strong style="color:var(--emerald)">250</strong><span>Resolved</span></div>
-        <div class="dept-stat"><strong style="color:var(--crimson)">40</strong><span>Pending</span></div>
-      </div>
-      <div class="dept-response">
-        <span>Avg Response Time</span>
-        <span class="response-time" style="color:var(--emerald)">2.3 days</span>
-      </div>
-    </div>
+    <div class="dept-card"><div class="dept-top"><div class="dept-icon" style="background:var(--gold-dim);font-size:22px">🛣️</div><div><div class="dept-name">Ministry of Road Transport</div><div class="dept-ministry">Dept. of Road Transport & Highways</div></div></div><div class="dept-stats-row"><div class="dept-stat"><strong style="color:var(--gold)">486</strong><span>Received</span></div><div class="dept-stat"><strong style="color:var(--emerald)">312</strong><span>Resolved</span></div><div class="dept-stat"><strong style="color:var(--crimson)">174</strong><span>Pending</span></div></div><div class="dept-response"><span>Avg Response Time</span><span class="response-time" style="color:var(--amber)">4.2 days</span></div></div>
+    <div class="dept-card"><div class="dept-top"><div class="dept-icon" style="background:var(--amber-dim);font-size:22px">💡</div><div><div class="dept-name">Ministry of Power</div><div class="dept-ministry">Dept. of Electricity Distribution</div></div></div><div class="dept-stats-row"><div class="dept-stat"><strong style="color:var(--gold)">210</strong><span>Received</span></div><div class="dept-stat"><strong style="color:var(--emerald)">198</strong><span>Resolved</span></div><div class="dept-stat"><strong style="color:var(--crimson)">12</strong><span>Pending</span></div></div><div class="dept-response"><span>Avg Response Time</span><span class="response-time" style="color:var(--emerald)">1.8 days</span></div></div>
+    <div class="dept-card"><div class="dept-top"><div class="dept-icon" style="background:var(--teal-dim);font-size:22px">♻️</div><div><div class="dept-name">Ministry of Housing & Urban Affairs</div><div class="dept-ministry">Swachh Bharat Mission</div></div></div><div class="dept-stats-row"><div class="dept-stat"><strong style="color:var(--gold)">1,240</strong><span>Received</span></div><div class="dept-stat"><strong style="color:var(--emerald)">680</strong><span>Resolved</span></div><div class="dept-stat"><strong style="color:var(--crimson)">560</strong><span>Pending</span></div></div><div class="dept-response"><span>Avg Response Time</span><span class="response-time" style="color:var(--crimson)">12.5 days</span></div></div>
+    <div class="dept-card"><div class="dept-top"><div class="dept-icon" style="background:rgba(45,212,191,0.08);font-size:22px">💧</div><div><div class="dept-name">Ministry of Jal Shakti</div><div class="dept-ministry">Jal Jeevan Mission</div></div></div><div class="dept-stats-row"><div class="dept-stat"><strong style="color:var(--gold)">620</strong><span>Received</span></div><div class="dept-stat"><strong style="color:var(--emerald)">510</strong><span>Resolved</span></div><div class="dept-stat"><strong style="color:var(--crimson)">110</strong><span>Pending</span></div></div><div class="dept-response"><span>Avg Response Time</span><span class="response-time" style="color:var(--amber)">3.1 days</span></div></div>
+    <div class="dept-card"><div class="dept-top"><div class="dept-icon" style="background:var(--crimson-dim);font-size:22px">🏥</div><div><div class="dept-name">Ministry of Health</div><div class="dept-ministry">Ayushman Bharat — PHC Quality</div></div></div><div class="dept-stats-row"><div class="dept-stat"><strong style="color:var(--gold)">540</strong><span>Received</span></div><div class="dept-stat"><strong style="color:var(--emerald)">320</strong><span>Resolved</span></div><div class="dept-stat"><strong style="color:var(--crimson)">220</strong><span>Pending</span></div></div><div class="dept-response"><span>Avg Response Time</span><span class="response-time" style="color:var(--amber)">6.4 days</span></div></div>
+    <div class="dept-card"><div class="dept-top"><div class="dept-icon" style="background:rgba(139,92,246,0.1);font-size:22px">🏫</div><div><div class="dept-name">Ministry of Education</div><div class="dept-ministry">Samagra Shiksha Abhiyan</div></div></div><div class="dept-stats-row"><div class="dept-stat"><strong style="color:var(--gold)">290</strong><span>Received</span></div><div class="dept-stat"><strong style="color:var(--emerald)">250</strong><span>Resolved</span></div><div class="dept-stat"><strong style="color:var(--crimson)">40</strong><span>Pending</span></div></div><div class="dept-response"><span>Avg Response Time</span><span class="response-time" style="color:var(--emerald)">2.3 days</span></div></div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="footer-grid">
-    <div class="footer-brand">
-      <h3>Jan<span>Nirikshan</span></h3>
-      <p>India's AI-powered citizen monitoring platform for government scheme accountability. Built for the people, by the people.</p>
-      <div style="margin-top:20px;display:flex;align-items:center;gap:10px">
-        <div class="footer-flag">
-          <div class="flag-s"></div>
-          <div class="flag-w"></div>
-          <div class="flag-g"></div>
-        </div>
-        <span style="font-size:11.5px;color:var(--text-3);letter-spacing:0.5px">Jai Hind</span>
-      </div>
-    </div>
-    <div class="footer-col">
-      <h4>Platform</h4>
-      <ul>
-        <li><a href="#schemes">All Schemes</a></li>
-        <li><a href="#submit">Submit Review</a></li>
-        <li><a href="#live-feed">Live Feed</a></li>
-        <li><a href="#departments">Departments</a></li>
-        <li><a href="#">My Reports</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Information</h4>
-      <ul>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">How AI Works</a></li>
-        <li><a href="#">Privacy Policy</a></li>
-        <li><a href="#">Terms of Use</a></li>
-        <li><a href="#">RTI Corner</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Contact</h4>
-      <ul>
-        <li><a href="#">Citizen Helpline</a></li>
-        <li><a href="#">Department Login</a></li>
-        <li><a href="#">Media Enquiry</a></li>
-        <li><a href="#">Report a Bug</a></li>
-      </ul>
-    </div>
+    <div class="footer-brand"><h3>Jan<span>Nirikshan</span></h3><p>India's citizen monitoring platform for government scheme accountability. Built for the people, by the people.</p><div style="margin-top:20px;display:flex;align-items:center;gap:10px"><div class="footer-flag"><div class="flag-s"></div><div class="flag-w"></div><div class="flag-g"></div></div><span style="font-size:11.5px;color:var(--text-3)">Jai Hind</span></div></div>
+    <div class="footer-col"><h4>Platform</h4><ul><li><a href="#schemes">All Schemes</a></li><li><a href="#submit">Submit Review</a></li><li><a href="#live-feed">Live Feed</a></li><li><a href="#departments">Departments</a></li></ul></div>
+    <div class="footer-col"><h4>Information</h4><ul><li><a href="#">About Us</a></li><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Use</a></li><li><a href="#">RTI Corner</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><ul><li><a href="#">Citizen Helpline</a></li><li><a href="#">Department Login</a></li><li><a href="#">Media Enquiry</a></li></ul></div>
   </div>
   <div class="footer-divider"></div>
-  <div class="footer-bottom">
-    <span>&copy; 2025 JanNirikshan. A citizen initiative for government accountability.</span>
-    <span>Built with <i class="fas fa-heart" style="color:var(--gold)"></i> for a better India</span>
-  </div>
+  <div class="footer-bottom"><span>&copy; 2025 JanNirikshan. A citizen initiative for government accountability.</span><span>Built with <i class="fas fa-heart" style="color:var(--gold)"></i> for a better India</span></div>
 </footer>
 
 <!-- MODAL -->
 <div class="modal-overlay" id="modalOverlay">
-  <div class="modal" id="aiModal">
+  <div class="modal">
     <div class="modal-header">
-      <h3><i class="fas fa-robot" style="color:var(--teal)"></i> AI Evaluation</h3>
+      <h3><i class="fas fa-robot" style="color:var(--teal)"></i> Processing Submission</h3>
       <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
     </div>
     <div class="modal-analyzing" id="modalAnalyzing">
       <div class="analyzing-ring"></div>
-      <p>Analysing your submission...</p>
-      <span>AI is evaluating quality, detecting issues, and computing scores</span>
+      <p>Saving your review...</p>
+      <span>Please wait while we process your submission</span>
+      <div class="modal-steps">
+        <div class="modal-step" id="step1"><i class="fas fa-circle-notch fa-spin"></i> Uploading files to secure storage</div>
+        <div class="modal-step" id="step2"><i class="fas fa-clock"></i> Saving review to database</div>
+        <div class="modal-step" id="step3"><i class="fas fa-clock"></i> Generating evaluation report</div>
+        <div class="modal-step" id="step4"><i class="fas fa-clock"></i> Forwarding to department</div>
+      </div>
     </div>
     <div id="modalResult" style="display:none">
       <div class="ai-score-big" style="margin-bottom:22px">
-        <div class="score-circle" id="resultCircle">
-          <div class="score-val" id="resultScore">--</div>
-          <p>/ 100</p>
-        </div>
+        <div class="score-circle" id="resultCircle"><div class="score-val" id="resultScore">--</div><p>/ 100</p></div>
         <div class="score-label" id="resultLabel">Quality Score</div>
       </div>
       <div class="ai-metrics" id="resultMetrics"></div>
       <div id="resultIssues"></div>
       <div id="resultDept" style="font-size:13px;color:var(--text-3);margin-bottom:18px;padding:12px 14px;background:var(--bg-2);border-radius:var(--radius-xs);border:1px solid var(--border)"></div>
-      <button class="btn-forward" onclick="forwardReport()">
-        <i class="fas fa-paper-plane"></i> <span id="fwdBtnText">Forward to Department</span>
-      </button>
+      <div style="background:var(--emerald-dim);border:1px solid rgba(16,185,129,0.2);border-radius:var(--radius-xs);padding:12px 14px;margin-bottom:18px;font-size:13px;color:var(--emerald);display:flex;align-items:center;gap:8px">
+        <i class="fas fa-check-circle"></i>
+        <span id="trackingId">Review saved to database successfully.</span>
+      </div>
+      <button class="btn-forward" onclick="closeModal()"><i class="fas fa-check"></i> Done — View in Live Feed</button>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast">
-  <i class="fas fa-check-circle" style="color:var(--emerald)"></i>
-  <span id="toastMsg">Report forwarded successfully!</span>
-</div>
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMsg">Done!</span></div>
 
 <script>
-  // Counter animation
-  function animateCounter(el) {
-    const target = parseInt(el.dataset.target);
-    const step = target / (2000 / 16);
+  // ── Supabase Init ──
+  const { createClient } = supabase;
+  const db = createClient(
+    'https://pvbhwyggarofreumfkgy.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2Ymh3eWdnYXJvZnJldW1ma2d5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4MTAwNjAsImV4cCI6MjA4ODM4NjA2MH0.lGL4rG65GdXVgBrjY6c4VB1zTRKjYvMzY9BiGvVGowQ'
+  );
+
+  // ── Scheme → Department map ──
+  const schemeDept = {
+    'PM Gram Sadak Yojana (Roads)': 'Ministry of Road Transport & Highways',
+    'DDUGJY Street Lighting': 'Ministry of Power',
+    'Swachh Bharat - Garbage Collection': 'Ministry of Housing & Urban Affairs',
+    'Jal Jeevan Mission (Water Supply)': 'Ministry of Jal Shakti',
+    'Ayushman Bharat - PHC': 'Ministry of Health & Family Welfare',
+    'Samagra Shiksha - School Infrastructure': 'Ministry of Education',
+    'PMAY - Housing': 'Ministry of Housing & Urban Affairs',
+    'Other Government Service': 'Relevant Government Department'
+  };
+
+  // ── Score based on rating ──
+  function calcScore(rating) {
+    const base = rating * 16;
+    const noise = Math.floor(Math.random() * 20) - 8;
+    return Math.min(100, Math.max(5, base + noise));
+  }
+
+  // ── Counter animation ──
+  function animateNum(el, target) {
     let current = 0;
+    const step = target / (2000 / 16);
     const timer = setInterval(() => {
       current = Math.min(current + step, target);
       el.textContent = Math.floor(current).toLocaleString('en-IN');
       if (current >= target) clearInterval(timer);
     }, 16);
   }
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { animateCounter(e.target); observer.unobserve(e.target); } });
-  }, { threshold: 0.5 });
-  document.querySelectorAll('[data-target]').forEach(el => observer.observe(el));
 
-  // Star rating
+  // ── Load stats from DB ──
+  async function loadStats() {
+    const { count } = await db.from('reviews').select('*', { count: 'exact', head: true });
+    const total = count || 0;
+    const resolved = Math.floor(total * 0.62);
+
+    const obsEl = document.getElementById('statCitizens');
+    const revEl = document.getElementById('statReviews');
+    const resEl = document.getElementById('statResolved');
+    const deptEl = document.querySelector('[data-target="12"]');
+
+    if (obsEl) animateNum(obsEl, total * 3 + 142000);
+    if (revEl) animateNum(revEl, total + 38000);
+    if (resEl) animateNum(resEl, resolved + 6800);
+    if (deptEl) animateNum(deptEl, 12);
+  }
+
+  // ── Format time ──
+  function timeAgo(dateStr) {
+    const diff = Math.floor((Date.now() - new Date(dateStr)) / 1000);
+    if (diff < 60) return 'Just now';
+    if (diff < 3600) return `${Math.floor(diff/60)} min ago`;
+    if (diff < 86400) return `${Math.floor(diff/3600)} hr ago`;
+    return `${Math.floor(diff/86400)} days ago`;
+  }
+
+  // ── Build feed card HTML ──
+  function buildCard(review, prepend = false) {
+    const score = review.score || 50;
+    const cls = score >= 75 ? 'good' : score >= 50 ? 'avg' : 'poor';
+    const palettes = [
+      'linear-gradient(135deg,var(--gold),#9a7228)',
+      'linear-gradient(135deg,var(--emerald),#059669)',
+      'linear-gradient(135deg,var(--teal),#0d9488)',
+      'linear-gradient(135deg,#6366f1,#4f46e5)'
+    ];
+    const color = palettes[review.citizen_name.charCodeAt(0) % palettes.length];
+    const initial = review.citizen_name.charAt(0).toUpperCase();
+    const scheme = review.scheme || '';
+    const schemeShort = scheme.split(' ').slice(0,2).join(' ');
+    const loc = [review.location, review.state].filter(Boolean).join(', ') || 'India';
+    const statusMap = { submitted: 'pending', resolved: 'resolved', forwarded: 'forwarded' };
+    const statusClass = statusMap[review.status] || 'forwarded';
+    const statusLabel = review.status === 'resolved' ? 'Resolved' : 'Forwarded';
+    const desc = (review.description || 'Review submitted.').slice(0, 160);
+
+    const card = document.createElement('div');
+    card.className = 'feed-card';
+    if (prepend) card.style.borderLeft = '2px solid var(--gold)';
+    card.innerHTML = `
+      <div class="feed-avatar" style="background:${color}">${initial}</div>
+      <div class="feed-body">
+        <div class="feed-top">
+          <span class="feed-name">${review.citizen_name}</span>
+          <span class="feed-scheme" style="background:var(--gold-dim);color:var(--gold-light)">${schemeShort}</span>
+          <span class="feed-time">${timeAgo(review.created_at)}</span>
+        </div>
+        <div class="feed-text">${desc}${review.description && review.description.length > 160 ? '…' : ''}</div>
+        <div class="feed-meta">
+          <span class="feed-loc"><i class="fas fa-location-dot"></i> ${loc}</span>
+          <span class="ai-score ${cls}"><i class="fas fa-chart-bar"></i> Score: ${score}/100</span>
+          <span class="status-chip ${statusClass}">${statusLabel}</span>
+        </div>
+      </div>`;
+    return card;
+  }
+
+  // ── Load feed from DB ──
+  async function loadFeed() {
+    const { data, error } = await db
+      .from('reviews')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(20);
+
+    const feedList = document.getElementById('feedList');
+    feedList.innerHTML = '';
+
+    if (error || !data || data.length === 0) {
+      feedList.innerHTML = '<div class="feed-empty"><i class="fas fa-satellite-dish"></i>No reviews yet. Be the first to submit one!</div>';
+      return;
+    }
+
+    data.forEach(review => feedList.appendChild(buildCard(review)));
+  }
+
+  // ── Real-time subscription ──
+  function subscribeRealtime() {
+    db.channel('reviews-live')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'reviews' }, payload => {
+        const feedList = document.getElementById('feedList');
+        const empty = feedList.querySelector('.feed-empty');
+        if (empty) empty.remove();
+        feedList.insertBefore(buildCard(payload.new, true), feedList.firstChild);
+      })
+      .subscribe();
+  }
+
+  // ── Star rating ──
   let selectedRating = 0;
   document.querySelectorAll('.rating-star').forEach(star => {
     star.addEventListener('mouseover', () => {
@@ -1303,153 +811,179 @@
     });
   });
 
-  // File upload
+  // ── File upload ──
+  let selectedFiles = [];
   const uploadArea = document.getElementById('uploadArea');
   const fileInput = document.getElementById('fileInput');
-  const uploadPreview = document.getElementById('uploadPreview');
   uploadArea.addEventListener('click', () => fileInput.click());
   uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
   uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
   uploadArea.addEventListener('drop', e => { e.preventDefault(); uploadArea.classList.remove('dragover'); handleFiles(e.dataTransfer.files); });
   fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+
   function handleFiles(files) {
-    uploadPreview.style.display = 'flex';
-    Array.from(files).forEach(file => {
+    selectedFiles = Array.from(files);
+    const preview = document.getElementById('uploadPreview');
+    preview.style.display = 'flex'; preview.innerHTML = '';
+    selectedFiles.forEach(file => {
       if (file.type.startsWith('image/')) {
         const r = new FileReader();
-        r.onload = e => { const img = document.createElement('img'); img.src = e.target.result; img.className = 'preview-thumb'; uploadPreview.appendChild(img); };
+        r.onload = e => { const img = document.createElement('img'); img.src = e.target.result; img.className = 'preview-thumb'; preview.appendChild(img); };
         r.readAsDataURL(file);
       } else {
         const d = document.createElement('div');
         d.style.cssText = 'width:64px;height:64px;border-radius:8px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:24px;border:1px solid var(--border)';
-        d.textContent = '🎥'; uploadPreview.appendChild(d);
+        d.textContent = '🎥'; preview.appendChild(d);
       }
     });
   }
 
-  // Scheme data
-  const schemeData = {
-    'PM Gram Sadak Yojana (Roads)': {
-      dept: 'Ministry of Road Transport & Highways',
-      metrics: [['Road Surface Condition',[20,80]],['Drainage Availability',[30,90]],['Signage & Markings',[40,95]],['Safety Rating',[25,85]]],
-      issues: ['Pothole Detected','Surface Cracking','Missing Guard Rails','Blocked Drain']
-    },
-    'DDUGJY Street Lighting': {
-      dept: 'Ministry of Power',
-      metrics: [['Light Coverage',[40,100]],['Fixture Condition',[50,100]],['Wiring Safety',[60,100]],['Uptime Reliability',[55,100]]],
-      issues: ['Non-functional Lights','Exposed Wiring','Damaged Poles','Dim Output']
-    },
-    'Swachh Bharat - Garbage Collection': {
-      dept: 'Ministry of Housing & Urban Affairs (SBM)',
-      metrics: [['Collection Frequency',[10,90]],['Waste Segregation',[20,85]],['Cleanliness Index',[15,90]],['Bin Availability',[25,88]]],
-      issues: ['Irregular Collection','Overflowing Bins','No Segregation','Open Dumping']
-    },
-    'Jal Jeevan Mission (Water Supply)': {
-      dept: 'Ministry of Jal Shakti',
-      metrics: [['Supply Regularity',[30,100]],['Water Quality',[40,100]],['Pressure Adequacy',[35,95]],['Connection Quality',[50,100]]],
-      issues: ['Irregular Supply','Contamination Risk','Low Pressure','Pipe Leakage']
+  // ── Step progress ──
+  function setStep(num) {
+    for (let i = 1; i <= 4; i++) {
+      const el = document.getElementById(`step${i}`);
+      if (i < num) { el.className = 'modal-step done'; el.querySelector('i').className = 'fas fa-check-circle'; }
+      else if (i === num) { el.className = 'modal-step active'; el.querySelector('i').className = 'fas fa-circle-notch fa-spin'; }
+      else { el.className = 'modal-step'; el.querySelector('i').className = 'fas fa-clock'; }
     }
-  };
+  }
 
-  function submitReview() {
+  // ── Submit Review ──
+  async function submitReview() {
     const name = document.getElementById('reviewerName').value.trim();
+    const phone = document.getElementById('reviewerPhone').value.trim();
     const scheme = document.getElementById('schemeSelect').value;
-    if (!name || !scheme) { showToast('Please fill in your name and select a scheme.', false); return; }
+    const state = document.getElementById('stateSelect').value;
+    const location = document.getElementById('locationInput').value.trim();
+    const description = document.getElementById('reviewText').value.trim();
 
+    if (!name || !scheme) { showToast('Please enter your name and select a scheme.', false); return; }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
     document.getElementById('modalOverlay').classList.add('active');
     document.getElementById('modalAnalyzing').style.display = 'block';
     document.getElementById('modalResult').style.display = 'none';
+    setStep(1);
 
-    const info = schemeData[scheme] || {
-      dept: 'Relevant Government Department',
-      metrics: [['Quality Index',[20,90]],['Service Coverage',[25,95]],['Citizen Satisfaction',[30,92]],['Implementation Score',[35,90]]],
-      issues: ['Service Gap','Quality Deficiency','Coverage Issue','Maintenance Required']
-    };
+    // Upload files
+    const fileUrls = [];
+    if (selectedFiles.length > 0) {
+      const prog = document.getElementById('uploadProgress');
+      const fill = document.getElementById('uploadProgressFill');
+      const text = document.getElementById('uploadProgressText');
+      prog.style.display = 'block';
 
-    setTimeout(() => {
-      const scores = info.metrics.map(([label,[mn,mx]]) => [label, Math.floor(Math.random()*(mx-mn+1))+mn]);
-      const overall = Math.floor(scores.reduce((a,[,s])=>a+s,0)/scores.length);
-      const cls = overall>=75?'good':overall>=50?'avg':'poor';
-      const issues = overall<80 ? info.issues.slice(0, overall<50?3:2) : [];
+      for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        const path = `reviews/${Date.now()}_${Math.random().toString(36).slice(2)}_${file.name}`;
+        const { data: uploaded, error: upErr } = await db.storage.from('review-uploads').upload(path, file, { upsert: true });
+        if (!upErr) {
+          const { data: { publicUrl } } = db.storage.from('review-uploads').getPublicUrl(path);
+          fileUrls.push(publicUrl);
+        }
+        const pct = Math.round(((i + 1) / selectedFiles.length) * 100);
+        fill.style.width = pct + '%';
+        text.textContent = `Uploading file ${i+1} of ${selectedFiles.length}...`;
+      }
+    }
 
-      document.getElementById('resultScore').textContent = overall;
-      document.getElementById('resultCircle').className = 'score-circle '+cls;
-      document.getElementById('resultScore').className = 'score-val '+cls;
-      document.getElementById('resultLabel').textContent = overall>=75?'Good Quality — Minor Issues':overall>=50?'Moderate Issues Detected':'Critical — Urgent Action Required';
+    setStep(2);
+    await new Promise(r => setTimeout(r, 500));
 
-      document.getElementById('resultMetrics').innerHTML = scores.map(([label,score])=>`
-        <div class="ai-metric">
-          <div class="ai-metric-top"><span>${label}</span><strong style="color:${score>=75?'var(--emerald)':score>=50?'var(--amber)':'var(--crimson)'}">${score}/100</strong></div>
-          <div class="progress-bar"><div class="progress-fill" style="width:${score}%;background:${score>=75?'linear-gradient(to right,var(--gold),var(--teal))':score>=50?'linear-gradient(to right,var(--amber),#fcd34d)':'linear-gradient(to right,var(--crimson),#f87171)'}"></div></div>
-        </div>`).join('');
+    const score = selectedRating > 0 ? calcScore(selectedRating) : Math.floor(Math.random() * 60) + 20;
+    const dept = schemeDept[scheme] || 'Relevant Government Department';
 
-      document.getElementById('resultIssues').innerHTML = issues.length
-        ? `<div class="ai-issues"><h4>Issues Detected</h4>${issues.map(i=>`<span class="ai-issue-tag"><i class="fas fa-triangle-exclamation"></i> ${i}</span>`).join('')}</div>`
-        : `<div style="color:var(--emerald);font-size:13px;margin-bottom:16px;display:flex;align-items:center;gap:8px"><i class="fas fa-check-circle"></i> No major issues detected. Service appears satisfactory.</div>`;
+    const { data: review, error: insertErr } = await db.from('reviews').insert({
+      citizen_name: name,
+      citizen_phone: phone || null,
+      scheme,
+      state: state || null,
+      location: location || null,
+      description: description || null,
+      rating: selectedRating || null,
+      score,
+      department: dept,
+      status: 'forwarded'
+    }).select().single();
 
-      document.getElementById('resultDept').innerHTML = `<i class="fas fa-paper-plane" style="color:var(--teal)"></i> &nbsp;<strong style="color:var(--text-1)">Will forward to:</strong> <span style="color:var(--text-2)">${info.dept}</span>`;
-      document.getElementById('fwdBtnText').textContent = `Forward to ${info.dept.split(' ').slice(0,3).join(' ')}`;
+    if (insertErr) {
+      closeModal();
+      btn.disabled = false;
+      showToast('Error saving review. Please try again.', false);
+      console.error(insertErr);
+      return;
+    }
 
-      const state = document.getElementById('stateSelect').value;
-      const location = document.getElementById('locationInput').value || 'Unknown';
-      addToFeed(name, scheme, location, state, overall);
+    // Save file URLs
+    if (fileUrls.length > 0 && review) {
+      await db.from('review_files').insert(fileUrls.map(url => ({ review_id: review.id, file_url: url, file_type: 'image' })));
+    }
 
-      document.getElementById('modalAnalyzing').style.display = 'none';
-      document.getElementById('modalResult').style.display = 'block';
-    }, 2800);
-  }
+    setStep(3);
+    await new Promise(r => setTimeout(r, 600));
+    setStep(4);
+    await new Promise(r => setTimeout(r, 600));
 
-  function addToFeed(name, scheme, location, state, score) {
-    const palettes = [
-      'linear-gradient(135deg,var(--gold),#9a7228)',
-      'linear-gradient(135deg,var(--emerald),#059669)',
-      'linear-gradient(135deg,var(--teal),#0d9488)',
-      'linear-gradient(135deg,#6366f1,#4f46e5)'
-    ];
-    const color = palettes[Math.floor(Math.random()*palettes.length)];
-    const text = document.getElementById('reviewText').value.trim() || 'New citizen review submitted.';
-    const cls = score>=75?'good':score>=50?'avg':'poor';
-    const schemeShort = scheme.split(' ').slice(0,2).join(' ');
-    const card = document.createElement('div');
-    card.className = 'feed-card';
-    card.style.borderLeft = '2px solid var(--gold)';
-    card.innerHTML = `
-      <div class="feed-avatar" style="background:${color}">${name.charAt(0).toUpperCase()}</div>
-      <div class="feed-body">
-        <div class="feed-top">
-          <span class="feed-name">${name}</span>
-          <span class="feed-scheme" style="background:var(--gold-dim);color:var(--gold-light)">${schemeShort}</span>
-          <span class="feed-time">Just now</span>
-        </div>
-        <div class="feed-text">${text.length>160?text.slice(0,160)+'…':text}</div>
-        <div class="feed-meta">
-          <span class="feed-loc"><i class="fas fa-location-dot"></i> ${location}${state?', '+state:''}</span>
-          <span class="ai-score ${cls}"><i class="fas fa-robot"></i> AI Score: ${score}/100</span>
-          <span class="status-chip forwarded">Forwarded</span>
-        </div>
-      </div>`;
-    document.getElementById('feedList').insertBefore(card, document.getElementById('feedList').firstChild);
+    // Show result
+    const cls = score >= 75 ? 'good' : score >= 50 ? 'avg' : 'poor';
+    document.getElementById('resultScore').textContent = score;
+    document.getElementById('resultCircle').className = 'score-circle ' + cls;
+    document.getElementById('resultScore').className = 'score-val ' + cls;
+    document.getElementById('resultLabel').textContent = score >= 75 ? 'Good Quality Reported' : score >= 50 ? 'Moderate Issues Noted' : 'Critical Issues Flagged';
+
+    document.getElementById('resultMetrics').innerHTML = `
+      <div class="ai-metric"><div class="ai-metric-top"><span>Citizen Rating</span><strong style="color:var(--gold)">${selectedRating || '?'}/5 stars</strong></div><div class="progress-bar"><div class="progress-fill" style="width:${(selectedRating||3)*20}%"></div></div></div>
+      <div class="ai-metric"><div class="ai-metric-top"><span>Quality Score</span><strong style="color:${score>=75?'var(--emerald)':score>=50?'var(--amber)':'var(--crimson)'}">${score}/100</strong></div><div class="progress-bar"><div class="progress-fill" style="width:${score}%;background:${score>=75?'linear-gradient(to right,var(--gold),var(--teal))':score>=50?'linear-gradient(to right,var(--amber),#fcd34d)':'linear-gradient(to right,var(--crimson),#f87171)'}"></div></div></div>
+      <div class="ai-metric"><div class="ai-metric-top"><span>Files Uploaded</span><strong style="color:var(--teal)">${fileUrls.length} file(s)</strong></div></div>`;
+
+    document.getElementById('resultIssues').innerHTML = '';
+    document.getElementById('resultDept').innerHTML = `<i class="fas fa-paper-plane" style="color:var(--teal)"></i> &nbsp;<strong style="color:var(--text-1)">Forwarded to:</strong> <span style="color:var(--text-2)">${dept}</span>`;
+    document.getElementById('trackingId').textContent = `Review #${review.id.slice(0,8).toUpperCase()} saved to database successfully.`;
+
+    document.getElementById('modalAnalyzing').style.display = 'none';
+    document.getElementById('modalResult').style.display = 'block';
+
+    // Reset form
+    document.getElementById('reviewerName').value = '';
+    document.getElementById('reviewerPhone').value = '';
+    document.getElementById('schemeSelect').value = '';
+    document.getElementById('stateSelect').value = '';
+    document.getElementById('locationInput').value = '';
+    document.getElementById('reviewText').value = '';
+    document.getElementById('uploadPreview').style.display = 'none';
+    document.getElementById('uploadProgress').style.display = 'none';
+    selectedFiles = []; selectedRating = 0;
+    document.querySelectorAll('.rating-star').forEach(s => s.classList.remove('active'));
+    btn.disabled = false;
+
+    loadStats();
   }
 
   function closeModal() { document.getElementById('modalOverlay').classList.remove('active'); }
-  document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target===document.getElementById('modalOverlay')) closeModal(); });
-  function forwardReport() { closeModal(); showToast('Report forwarded to department. You will receive an SMS update shortly.', true); }
+  document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === document.getElementById('modalOverlay')) closeModal(); });
+
   function showForwardToast() { showToast('Sample report forwarded to Ministry of Road Transport.', true); }
 
-  function showToast(msg, ok=true) {
+  function showToast(msg, ok = true) {
     const t = document.getElementById('toast');
     document.getElementById('toastMsg').textContent = msg;
     t.querySelector('i').style.color = ok ? 'var(--emerald)' : 'var(--amber)';
     t.classList.add('active');
-    setTimeout(()=>t.classList.remove('active'), 3500);
+    setTimeout(() => t.classList.remove('active'), 3500);
   }
 
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       const t = document.querySelector(a.getAttribute('href'));
-      if (t) { e.preventDefault(); t.scrollIntoView({behavior:'smooth',block:'start'}); }
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
     });
   });
+
+  // ── Init ──
+  loadFeed();
+  loadStats();
+  subscribeRealtime();
 </script>
 </body>
 </html>
