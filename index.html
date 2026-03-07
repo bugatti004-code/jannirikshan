@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
     :root {
       --bg:        #080D1A;
@@ -660,6 +661,29 @@
 <div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMsg">Done!</span></div>
 
 <script>
+  // ── EmailJS Init ──
+  emailjs.init('RacrH9rXynOWySyHq');
+
+  // ── Send email notification ──
+  async function sendEmailNotification(review, score) {
+    try {
+      await emailjs.send('service_aokk0te', 'template_b6bdi6d', {
+        citizen_name: review.citizen_name || 'Unknown',
+        citizen_phone: review.citizen_phone || 'Not provided',
+        scheme: review.scheme || 'Not specified',
+        location: review.location || 'Not specified',
+        state: review.state || 'Not specified',
+        rating: review.rating ? `${review.rating}/5` : 'Not rated',
+        score: `${score}/100`,
+        description: review.description || 'No description provided.',
+        department: review.department || 'Relevant Department',
+        review_id: review.id ? review.id.slice(0,8).toUpperCase() : 'N/A'
+      });
+    } catch (err) {
+      console.warn('Email notification failed:', err);
+    }
+  }
+
   // ── Supabase Init ──
   const { createClient } = supabase;
   const db = createClient(
@@ -914,6 +938,9 @@
       console.error(insertErr);
       return;
     }
+
+    // Send email notification
+    await sendEmailNotification({ ...review, citizen_phone: phone, description, state, location }, score);
 
     // Save file URLs
     if (fileUrls.length > 0 && review) {
